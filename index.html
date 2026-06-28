@@ -94,14 +94,14 @@ a:hover { text-decoration: underline; }
     <div class="do-mark">DO</div>
     <div>
       <h1>AIE Hackathon 2026 &middot; Project Analysis</h1>
-      <p>June 27&ndash;28, 2026 &nbsp;&middot;&nbsp; Generated 2026-06-28 20:29 UTC &nbsp;&middot;&nbsp; Internal use only</p>
+      <p>June 27&ndash;28, 2026 &nbsp;&middot;&nbsp; Generated 2026-06-28 21:04 UTC &nbsp;&middot;&nbsp; Internal use only</p>
     </div>
   </div>
   <div class="stats">
     <span class="chip">69 projects</span>
-    <span class="chip chip-blue">11 DO strong</span>
-    <span class="chip chip-green">24 DO detected</span>
-    <span class="chip chip-amber">21 sales flags</span>
+    <span class="chip chip-blue">12 DO strong</span>
+    <span class="chip chip-green">28 DO detected</span>
+    <span class="chip chip-amber">25 sales flags</span>
     <span class="chip chip-red">1 date flagged</span>
   </div>
 </header>
@@ -138,7 +138,7 @@ a:hover { text-decoration: underline; }
   <tbody id="tbody">
     <tr class="" data-num="1" data-name="test submission" data-tldr="placeholder test submission." data-notes="test entry — ignore." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">1</td>
-      <td class="project-cell"><a href="https://github.com/ecsbeats/testprojec" target="_blank">Test Submission</a><div class="repo-path">ecsbeats/testprojec</div><div class="demo-link"><a href="https://youtube.com/testvideo" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a href="https://github.com/ecsbeats/testproject" target="_blank">Test Submission</a><div class="repo-path">ecsbeats/testproject</div><div class="demo-link"><a href="https://youtube.com/testvideo" target="_blank">Demo</a></div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Placeholder test submission.</td>
       <td class="tech-cell"></td>
@@ -162,18 +162,18 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-27</span></td>
       <td class="notes-cell">Elegant RSI via SKILL.md patching. TypeScript. Strong entry for hackathon theme.</td>
     </tr>
-    <tr class="" data-num="3" data-name="rsi" data-tldr="recursive self-improving ai that fine-tunes its own weights from failures via lo" data-notes="empty repo. description sounds interesting." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="3" data-name="rsi" data-tldr="recursive self-improving ai that fine-tunes its own weights from failures via lo" data-notes="do inference is the model backend. solo. meta/target agent + lora loop." data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">3</td>
-      <td class="project-cell"><a href="https://github.com/whatdhack/recursive-self-improvemen" target="_blank">RSI</a><div class="repo-path">whatdhack/recursive-self-improvemen</div><div class="demo-link"><a href="https://github.com/whatdhack/recursive-self-improvement/blob/main/rsi_explainer.mp4" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a href="https://github.com/whatdhack/recursive-self-improvement" target="_blank">RSI</a><div class="repo-path">whatdhack/recursive-self-improvement</div><div class="demo-link"><a href="https://github.com/whatdhack/recursive-self-improvement/blob/main/rsi_explainer.mp4" target="_blank">Demo</a></div></td>
       <td class="members-cell">1</td>
-      <td class="tldr-cell">Recursive self-improving AI that fine-tunes its own weights from failures via LoRA.</td>
+      <td class="tldr-cell">Recursive self-improving AI that fine-tunes its own weights from failures via LoRA, using DO Inference (inference.do-ai.run) as the OpenAI-compatible model backend.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
-      <td class="score s3">3</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">Empty repo. Description sounds interesting.</td>
+      <td><span class="badge badge-inference" title="README.md: | `OPENAI_BASE_URL` | `https://inference.do-ai.run/v1/` |">Inference</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td>
+      <td><span class="sales-yes" title="DO Inference set as OPENAI_BASE_URL for the RSI loop. Real inference customer.">Yes</span></td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">DO Inference is the model backend. Solo. Meta/target agent + LoRA loop.</td>
     </tr>
     <tr class="" data-num="4" data-name="shake" data-tldr="interactive 3d earthquake prediction simulator for the sf bay area with real sei" data-notes="creative geo-relevant demo. deployed on google cloud run." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">4</td>
@@ -188,22 +188,22 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-28</span></td>
       <td class="notes-cell">Creative geo-relevant demo. Deployed on Google Cloud Run.</td>
     </tr>
-    <tr class="" data-num="5" data-name="field-ratchet: a recursively self-improving ai for pcb design." data-tldr="self-improving pcb layout compiler: feed it a kicad schematic and it autonomousl" data-notes="empty repo but genuinely novel concept." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="5" data-name="field-ratchet: a recursively self-improving ai for pcb design." data-tldr="self-improving pcb layout compiler: feed it a kicad schematic and it autonomousl" data-notes="17 files. genuinely novel — ai pcb layout is a hard unsolved problem. no do usage." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">5</td>
-      <td class="project-cell"><a href="https://github.com/JacobFV/fieldratche" target="_blank">field-ratchet: a recursively self-improving AI for PCB design.</a><div class="repo-path">JacobFV/fieldratche</div></td>
+      <td class="project-cell"><a href="https://github.com/JacobFV/fieldratchet" target="_blank">field-ratchet: a recursively self-improving AI for PCB design.</a><div class="repo-path">JacobFV/fieldratchet</div></td>
       <td class="members-cell">1</td>
-      <td class="tldr-cell">Self-improving PCB layout compiler: feed it a KiCad schematic and it autonomously places, routes, and scores a real board.</td>
+      <td class="tldr-cell">Self-improving PCB layout compiler: feed it a KiCad schematic and it autonomously parses, places, routes, and scores a real board.</td>
       <td class="tech-cell"></td>
       <td><span class="badge-none badge">None</span></td>
       <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
       <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">Empty repo but genuinely novel concept.</td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">17 files. Genuinely novel — AI PCB layout is a hard unsolved problem. No DO usage.</td>
     </tr>
-    <tr class="" data-num="6" data-name="atlantis" data-tldr="rl agent (grpo + lora) that learns person-specific privacy attacks that bypass u" data-notes="empty repo. interesting adversarial rsi angle." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="6" data-name="atlantis" data-tldr="rl agent (grpo + lora) that learns person-specific privacy attacks that bypass u" data-notes="16 files. strong adversarial rsi angle. no do usage." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">6</td>
-      <td class="project-cell"><a href="https://github.com/Bestpart-Irene/RL-persona-red-team-agen" target="_blank">Atlantis</a><div class="repo-path">Bestpart-Irene/RL-persona-red-team-agen</div></td>
+      <td class="project-cell"><a href="https://github.com/Bestpart-Irene/RL-persona-red-team-agent" target="_blank">Atlantis</a><div class="repo-path">Bestpart-Irene/RL-persona-red-team-agent</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">RL agent (GRPO + LoRA) that learns person-specific privacy attacks that bypass universal safety filters, recursively improving its own curriculum.</td>
       <td class="tech-cell"></td>
@@ -211,8 +211,8 @@ a:hover { text-decoration: underline; }
       <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
       <td class="score s3">3</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
       <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">Empty repo. Interesting adversarial RSI angle.</td>
+      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="notes-cell">16 files. Strong adversarial RSI angle. No DO usage.</td>
     </tr>
     <tr class="" data-num="7" data-name="agentic_ontology" data-tldr="eight ai agents continuously analyze live fed data, synthesized into a defi/cryp" data-notes="anthropic api. multi-agent ontology approach." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">7</td>
@@ -227,18 +227,18 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-27</span></td>
       <td class="notes-cell">Anthropic API. Multi-agent ontology approach.</td>
     </tr>
-    <tr class="" data-num="8" data-name="omnicon rsi" data-tldr="uses golden summaries from omnicon conversations to improve and benchmark conver" data-notes="empty repo. description vague." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="8" data-name="omnicon rsi" data-tldr="uses golden summaries from omnicon conversations to improve and benchmark conver" data-notes="17 files. benchmark-driven summarizer improvement. no do usage." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">8</td>
-      <td class="project-cell"><a href="https://github.com/willdahl/omnicon-rs" target="_blank">Omnicon RSI</a><div class="repo-path">willdahl/omnicon-rs</div></td>
+      <td class="project-cell"><a href="https://github.com/willdahl/omnicon-rsi" target="_blank">Omnicon RSI</a><div class="repo-path">willdahl/omnicon-rsi</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Uses golden summaries from Omnicon conversations to improve and benchmark conversation summarizers.</td>
       <td class="tech-cell"></td>
       <td><span class="badge-none badge">None</span></td>
       <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
-      <td class="score s2">2</td><td class="score s2">2</td><td class="score s2">2</td><td class="score s1">1</td>
+      <td class="score s3">3</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
       <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">Empty repo. Description vague.</td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">17 files. Benchmark-driven summarizer improvement. No DO usage.</td>
     </tr>
     <tr class="" data-num="9" data-name="recursivelearner" data-tldr="training-free rsi via a 'lessons memory' — small model improves at bbh tasks wit" data-notes="do used for external proposals. clean rsi loop. solo." data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">9</td>
@@ -266,18 +266,18 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-28</span></td>
       <td class="notes-cell">Compelling capability-regression proof. Gemini + browser-use.</td>
     </tr>
-    <tr class="" data-num="11" data-name="bonsai" data-tldr="turns domain experts into 'bonsai gardeners': they shape an ideal form once; the" data-notes="empty repo. interesting human-guided rsi framing." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="11" data-name="bonsai" data-tldr="turns domain experts into 'bonsai gardeners': they shape an ideal form once; the" data-notes="live on do app platform. 18 files. human-guided rsi framing." data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">11</td>
-      <td class="project-cell"><a href="https://github.com/enturesting/bonsa" target="_blank">Bonsai</a><div class="repo-path">enturesting/bonsa</div></td>
+      <td class="project-cell"><a href="https://github.com/enturesting/bonsai" target="_blank">Bonsai</a><div class="repo-path">enturesting/bonsai</div></td>
       <td class="members-cell">1</td>
-      <td class="tldr-cell">Turns domain experts into 'bonsai gardeners': they shape an ideal form once; the system watches a cited-answer agent and clusters failures by meaning.</td>
+      <td class="tldr-cell">Turns domain experts into 'bonsai gardeners': they shape an ideal form once; the system watches a cited-answer agent, catches untraceable citations, and clusters failures by meaning. Deployed live on DO App Platform.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
-      <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">Empty repo. Interesting human-guided RSI framing.</td>
+      <td><span class="badge badge-appplatform" title="README.md: **🔗 Live demo (deployed on DigitalOcean App Platform): https://bonsai-h7rzp.ondigitalocea">App Platform</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s2">2</td>
+      <td><span class="sales-yes" title="Live production deploy on DO App Platform (bonsai-h7rzp.ondigitalocean.app) with a dedicated Dockerfile. Real deployment customer.">Yes</span></td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">Live on DO App Platform. 18 files. Human-guided RSI framing.</td>
     </tr>
     <tr class="" data-num="12" data-name="veritas" data-tldr="silent ai agent that fact-checks live meetings in real time across 70+ languages" data-notes="gemini 3.5 live translate + livekit. strong real-world use case." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">12</td>
@@ -474,9 +474,9 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-27</span></td>
       <td class="notes-cell">config.py hardcodes DO endpoint. Clean integration. Solo.</td>
     </tr>
-    <tr class="" data-num="27" data-name="sqlwriters" data-tldr="drift detection and automated self-improvement for ai agents: detects accuracy d" data-notes="4-person team, empty repo. concept is solid." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="27" data-name="sqlwriters" data-tldr="drift detection and automated self-improvement for ai agents: detects accuracy d" data-notes="4-person team. 16 files. solid drift-detection concept. no do usage." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">27</td>
-      <td class="project-cell"><a href="https://github.com/loganrudd/agent-self-improvemen" target="_blank">SQLWriters</a><div class="repo-path">loganrudd/agent-self-improvemen</div></td>
+      <td class="project-cell"><a href="https://github.com/loganrudd/agent-self-improvement" target="_blank">SQLWriters</a><div class="repo-path">loganrudd/agent-self-improvement</div></td>
       <td class="members-cell">4</td>
       <td class="tldr-cell">Drift detection and automated self-improvement for AI agents: detects accuracy degradation and makes agents recover from their own failures autonomously.</td>
       <td class="tech-cell"></td>
@@ -484,8 +484,8 @@ a:hover { text-decoration: underline; }
       <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
       <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">4-person team, empty repo. Concept is solid.</td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">4-person team. 16 files. Solid drift-detection concept. No DO usage.</td>
     </tr>
     <tr class="" data-num="28" data-name="ignore all previous instructions" data-tldr="continual learning system over prediction markets using gemma e4b with on-policy" data-notes="committed in final 10 minutes. 3-person team." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">28</td>
@@ -526,18 +526,18 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-27</span></td>
       <td class="notes-cell">Important problem space. Solo developer.</td>
     </tr>
-    <tr class="" data-num="31" data-name="gpu sitter" data-tldr="on-call agent for gpu datacenter clusters: responds to nvidia sensor failures an" data-notes="4-person team, empty repo. gpu datacenter sre is a real gap." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="31" data-name="gpu sitter" data-tldr="on-call agent for gpu datacenter clusters: responds to nvidia sensor failures an" data-notes="4-person team. 17 files. live on do sfo3 droplet. real gpu datacenter sre gap." data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">31</td>
-      <td class="project-cell"><a href="https://github.com/jcmiller/hackathon-datacenter-agen" target="_blank">GPU Sitter</a><div class="repo-path">jcmiller/hackathon-datacenter-agen</div></td>
+      <td class="project-cell"><a href="https://github.com/jcmiller/hackathon-datacenter-agent" target="_blank">GPU Sitter</a><div class="repo-path">jcmiller/hackathon-datacenter-agent</div></td>
       <td class="members-cell">4</td>
-      <td class="tldr-cell">On-call agent for GPU datacenter clusters: responds to NVIDIA sensor failures and updates its own small ML prediction model from each incident.</td>
+      <td class="tldr-cell">On-call agent for GPU datacenter clusters: responds to NVIDIA sensor failures and updates its own small ML prediction model from each incident. Running live on a DO Droplet in SFO3.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
-      <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">4-person team, empty repo. GPU datacenter SRE is a real gap.</td>
+      <td><span class="badge badge-appplatform" title="README.md: **[http://134.199.208.214:8000](http://134.199.208.214:8000)** — publicly accessible, run">General DO</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s2">2</td>
+      <td><span class="sales-yes" title="Live deployment on DO Droplet (SFO3, public IP). 4-person team. GPU datacenter SRE = infrastructure-heavy customer.">Yes</span></td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">4-person team. 17 files. Live on DO SFO3 Droplet. Real GPU datacenter SRE gap.</td>
     </tr>
     <tr class="" data-num="32" data-name="podman: pair programmer" data-tldr="ambient pair programmer watching a shared livekit room, learning which intervent" data-notes="podman.live is live. full stack on do droplet: app, api, workers, caddy." data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">32</td>
@@ -773,18 +773,18 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-27</span></td>
       <td class="notes-cell">Rust codebase. Interesting military/maritime angle. README just says 'wsg' — hard to evaluate.</td>
     </tr>
-    <tr class="" data-num="50" data-name="focal point" data-tldr="chat interface that adapts in real time based on webcam iris tracking — a reward" data-notes="2-person team, empty repo. very creative concept (eye-tracking adaptive ux)." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="50" data-name="focal point" data-tldr="chat interface that adapts in real time based on webcam iris tracking — a reward" data-notes="2-person team. 15 files. creative eye-tracking adaptive ux. do/openai fallback code was removed — no live do usage." data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">50</td>
-      <td class="project-cell"><a href="https://github.com/ypatodkar/FocalPoin" target="_blank">Focal point</a><div class="repo-path">ypatodkar/FocalPoin</div></td>
+      <td class="project-cell"><a href="https://github.com/ypatodkar/FocalPoint" target="_blank">Focal point</a><div class="repo-path">ypatodkar/FocalPoint</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Chat interface that adapts in real time based on webcam iris tracking — a Reward Agent scores gaze zones and a Prompt Agent rebuilds the system prompt from your reading profile.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
-      <td class="score s4">4</td><td class="score s5">5</td><td class="score s4">4</td><td class="score s1">1</td>
+      <td><span class="badge badge-appplatform" title="README.md: - DigitalOcean/OpenAI fallback code was removed.">General DO</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td class="score s4">4</td><td class="score s5">5</td><td class="score s4">4</td><td class="score s2">2</td>
       <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">2-person team, empty repo. Very creative concept (eye-tracking adaptive UX).</td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">2-person team. 15 files. Creative eye-tracking adaptive UX. DO/OpenAI fallback code was removed — no live DO usage.</td>
     </tr>
     <tr class="" data-num="51" data-name="agent university" data-tldr="rigorous infrastructure for agent self-improvement: mcp trajectory recorder, ski" data-notes="solo. experiment ledger + trajectory logging. do app platform for selfimprove.ai." data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">51</td>
@@ -819,7 +819,7 @@ a:hover { text-decoration: underline; }
       <td class="tldr-cell">Recursive Autonomous Customer Experience system that solves underlying tickets rather than just answering them — backed by DigitalOcean Managed Postgres for persistence.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-database" title="package.json: "api:init-db": "npm run init-db --workspace=infra/digitalocean",">Managed DB</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s4">4</td><td class="score s3">3</td>
       <td><span class="sales-yes" title="DO Managed Postgres with actual integration code (db.ts, initDb.ts). 3-person team building CX platform. Recurring DB customer.">Yes</span></td>
       <td><span class="date-ok">2026-06-27</span></td>
@@ -851,15 +851,15 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-27</span></td>
       <td class="notes-cell">2-person team. callDigitalOcean() in production code. Port 8080. Beautiful continual preference learning.</td>
     </tr>
-    <tr class="" data-num="56" data-name="gatekeeper" data-tldr="trust layer for production web agents: gemini 3.5 predicts screens, gemma lora a" data-notes="technically very ambitious. 24 tests passing. first commit june 28 19:15 — final 15 minutes of hackathon." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="56" data-name="gatekeeper" data-tldr="trust layer for production web agents: gemini 3.5 predicts screens, gemma lora a" data-notes="technically very ambitious. 24 tests passing. first commit june 28 19:15 — final 15 minutes of hackathon." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">56</td>
       <td class="project-cell"><a href="https://github.com/vnmoorthy/Gatekeeper" target="_blank">Gatekeeper</a><div class="repo-path">vnmoorthy/Gatekeeper</div><div class="demo-link"><a href="https://drive.google.com/drive/folders/1wxOSSNLgbyRn9hImRr1gMyDGey4U84iw?usp=sharing" target="_blank">Demo</a></div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Trust layer for production web agents: Gemini 3.5 predicts screens, Gemma LoRA acts, a never-worse gate blocks regressions, and every action ships a tamper-evident signed receipt.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge badge-appplatform" title="dreamdriver/config.py: GPU_SSH_USER = _env("GPU_SSH_USER", "ubuntu")        # Lambda Labs = ubuntu, ">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
-      <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s2">2</td>
+      <td><span class="badge-none badge">None</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
       <td><span class="sales-no">—</span></td>
       <td><span class="date-ok">2026-06-28</span></td>
       <td class="notes-cell">Technically very ambitious. 24 tests passing. First commit June 28 19:15 — final 15 minutes of hackathon.</td>
@@ -903,18 +903,18 @@ a:hover { text-decoration: underline; }
       <td><span class="date-ok">2026-06-28</span></td>
       <td class="notes-cell">2-person team. PR automation is a well-trodden space.</td>
     </tr>
-    <tr class="" data-num="60" data-name="gambit" data-tldr="self-improving auto-negotiator: lists your secondhand items, negotiates with buy" data-notes="3-person team, empty repo. demo at gambit.nudepineapple.com/video. good idea." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="60" data-name="gambit" data-tldr="self-improving auto-negotiator that lists secondhand items, negotiates with buye" data-notes="strong multi-service do integration (app platform + pgvector memory). targeting best do prize. demo video live." data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">60</td>
-      <td class="project-cell"><a href="https://github.com/clocktower39/gamb" target="_blank">Gambit</a><div class="repo-path">clocktower39/gamb</div><div class="demo-link"><a href="https://gambit.nudepineapple.com/video" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a href="https://github.com/clocktower39/gambit" target="_blank">Gambit</a><div class="repo-path">clocktower39/gambit</div><div class="demo-link"><a href="https://gambit.nudepineapple.com/video" target="_blank">Demo</a></div></td>
       <td class="members-cell">3</td>
-      <td class="tldr-cell">Self-improving auto-negotiator: lists your secondhand items, negotiates with buyers, and gets better at it from its own past negotiations via continual self-play — no human labeling.</td>
+      <td class="tldr-cell">Self-improving auto-negotiator that lists secondhand items, negotiates with buyers, and improves via continual self-play. Deployed on DO App Platform with Managed Postgres + pgvector for negotiation memory.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
-      <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
-      <td class="notes-cell">3-person team, empty repo. Demo at gambit.nudepineapple.com/video. Good idea.</td>
+      <td><span class="badge badge-database" title="README.md: **DigitalOcean** (App Platform + Managed Postgres/pgvector). The seller, buyer, optimizer">Managed DB</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td>
+      <td><span class="sales-yes" title="Multi-service DO: App Platform + Managed Postgres/pgvector. Explicitly targeting 'Best DigitalOcean' prize. 3-person team. High-priority prospect.">Yes</span></td>
+      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="notes-cell">Strong multi-service DO integration (App Platform + pgvector memory). Targeting Best DO prize. Demo video live.</td>
     </tr>
     <tr class="" data-num="61" data-name="9320" data-tldr="mission control cockpit for autonomous ml experiment loops — trajectory-centric " data-notes="solo python. interesting trajectory-centric research interface." data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">61</td>
