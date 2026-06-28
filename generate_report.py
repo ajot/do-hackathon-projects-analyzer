@@ -99,6 +99,19 @@ SALES_REASONS = {
     66: "AI governance/drift detection for enterprise agents. Growing compliance need. TypeScript, 2-person team.",
 }
 
+# Judge assignments: repo num -> judge name. Notes from judges captured in JUDGE_NOTES.
+JUDGES = {
+    32: "Amit", 30: "Amit", 35: "Amit", 40: "Amit", 34: "Amit", 63: "Amit", 39: "Amit", 38: "Amit",
+    24: "Santhosh", 25: "Santhosh", 26: "Santhosh", 29: "Santhosh", 64: "Santhosh",
+    42: "Meghan", 46: "Meghan", 45: "Meghan", 50: "Meghan",
+}
+JUDGE_NOTES = {
+    32: "Used DO Inference.",
+    25: "Stood out for DO.",
+    42: "Used DO App Platform.",
+    46: "Stood out for DO.",
+}
+
 def detect_do(signals, description, partner_tech):
     services = []
     text = " ".join(signals + [description, partner_tech]).lower()
@@ -203,32 +216,56 @@ def make_row(r):
 
     is_flagged = flag_date(fc)
     is_verified = leg in ("Strong","Partial")
+    total = ucq + uniq + diff + dod
 
+    judge = JUDGES.get(num, "")
     row_cls = "flagged-date" if is_flagged else ""
-    data_attrs = f'data-num="{num}" data-name="{name.lower()}" data-tldr="{tldr[:80].lower()}" data-notes="{notes.lower()}" data-sales="{str(sales).lower()}" data-flagged="{str(is_flagged).lower()}" data-verified="{str(is_verified).lower()}"'
+    data_attrs = (f'data-num="{num}" data-name="{name.lower()}" data-tldr="{tldr[:80].lower()}" '
+                  f'data-notes="{notes.lower()}" data-judge="{judge.lower()}" data-total="{total}" '
+                  f'data-sales="{str(sales).lower()}" data-flagged="{str(is_flagged).lower()}" data-verified="{str(is_verified).lower()}"')
 
     # Project cell
-    demo_html = f'<div class="demo-link"><a href="{demo}" target="_blank">Demo</a></div>' if demo else ""
-    proj_html = f'<td class="project-cell"><a href="{url}" target="_blank">{name}</a><div class="repo-path">{owner_repo}</div>{demo_html}</td>'
+    demo_html = f'<a class="demo-link" href="{demo}" target="_blank">Demo &rarr;</a>' if demo else ""
+    proj_html = f'<td class="project-cell"><a class="project-name" href="{url}" target="_blank">{name}</a><div class="repo-path">{owner_repo}</div>{demo_html}</td>'
 
     # DO badges
     if do_services:
         badges = "".join(f'<span class="badge {badge_class(s)}" title="{ev}">{s}</span>' for s,ev in do_services)
     else:
-        badges = '<span class="badge-none badge">None</span>'
+        badges = '<span class="badge-none">&mdash;</span>'
 
     # Legitimacy
     leg_cls = {"Strong":"leg-strong","Partial":"leg-partial","Superficial":"leg-superficial"}[leg]
-    leg_html = f'<span class="leg {leg_cls}" title="{leg_reason}">{leg}</span>'
+    leg_dot = {"Strong":"dot-green","Partial":"dot-amber","Superficial":"dot-gray"}[leg]
+    leg_html = f'<span class="leg {leg_cls}" title="{leg_reason}"><span class="dot {leg_dot}"></span>{leg}</span>'
 
     # Scores
     def sc(v): return f'<td class="score {score_color(v)}">{v}</td>'
 
+    # Total score with mini bar
+    total_pct = round(total / 20 * 100)
+    total_cls = "t-high" if total >= 16 else "t-mid" if total >= 11 else "t-low"
+    total_html = (f'<td class="total-cell"><div class="total-wrap">'
+                  f'<span class="total-num {total_cls}">{total}</span>'
+                  f'<span class="total-max">/20</span>'
+                  f'<div class="total-bar"><div class="total-fill {total_cls}" style="width:{total_pct}%"></div></div>'
+                  f'</div></td>')
+
     # Sales
     if sales:
-        sales_html = f'<span class="sales-yes" title="{sales_reason}">Yes</span>'
+        sales_html = f'<span class="pill pill-sales" title="{sales_reason}">Flag</span>'
     else:
-        sales_html = '<span class="sales-no">—</span>'
+        sales_html = '<span class="muted">&mdash;</span>'
+
+    # Judged by
+    judge_note = JUDGE_NOTES.get(num, "")
+    if judge:
+        initials = judge[:1].upper()
+        title = f' title="{judge_note}"' if judge_note else ""
+        note_html = f'<span class="judge-note">{judge_note}</span>' if judge_note else ""
+        judge_html = f'<span class="judge"{title}><span class="judge-avatar j-{judge.lower()}">{initials}</span>{judge}</span>{note_html}'
+    else:
+        judge_html = '<span class="muted">&mdash;</span>'
 
     return f'''    <tr class="{row_cls}" {data_attrs}>
       <td class="num-cell">{num}</td>
@@ -238,9 +275,10 @@ def make_row(r):
       <td class="tech-cell">{partner}</td>
       <td>{badges}</td>
       <td>{leg_html}</td>
+      {total_html}
       {sc(ucq)}{sc(uniq)}{sc(diff)}{sc(dod)}
-      <td>{sales_html}</td>
-      <td>{fmt_date(fc)}</td>
+      <td class="sales-col">{sales_html}</td>
+      <td class="judge-col">{judge_html}</td>
       <td class="notes-cell">{notes}</td>
     </tr>'''
 
@@ -254,89 +292,142 @@ sales_ct  = sum(1 for r in repos if OVERRIDES.get(r.get("num"),{}).get("sales", 
 flagged_ct= sum(1 for r in repos if flag_date(r.get("first_commit")))
 gen_ts    = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-CSS = """*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+CSS = """:root {
+  --ink: #1a1a1a; --ink-2: #3c4257; --muted: #697386; --faint: #8792a2;
+  --line: #e6e8eb; --line-soft: #f0f1f3; --bg: #f6f8fa; --surface: #ffffff;
+  --blue: #1f6feb; --blue-dark: #1551b8; --blue-soft: #eaf1fe;
+  --green: #1a7f4b; --green-soft: #e6f6ed; --amber: #9a6a00; --amber-soft: #fdf3e0;
+  --red: #c0362c; --red-soft: #fcebe9; --gray-soft: #eef0f2;
+  --shadow: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+  --shadow-lg: 0 4px 16px rgba(16,24,40,.08), 0 1px 3px rgba(16,24,40,.06);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  background: #f1f5f9; color: #0f172a; font-size: 14px;
-  border-top: 3px solid #0069ff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--ink-2); font-size: 13.5px; line-height: 1.5;
 }
-header {
-  background: white; padding: 16px 28px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid #e2e8f0;
-}
-.header-left { display: flex; align-items: center; gap: 12px; }
+
+/* Header */
+header { background: var(--surface); padding: 22px 32px 20px; border-bottom: 1px solid var(--line); }
+.header-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.header-left { display: flex; align-items: center; gap: 13px; }
 .do-mark {
-  width: 34px; height: 34px; background: #0069ff; border-radius: 7px;
+  width: 36px; height: 36px; background: var(--ink); border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  color: white; font-weight: 700; font-size: 12px; flex-shrink: 0;
+  color: #fff; font-weight: 700; font-size: 13px; letter-spacing: -0.02em; flex-shrink: 0;
 }
-header h1 { font-size: 15px; font-weight: 600; color: #0f172a; }
-header p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
-.stats { display: flex; gap: 6px; }
-.chip { padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 500; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; }
-.chip-blue  { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-.chip-green { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
-.chip-amber { background: #fffbeb; color: #92400e; border-color: #fde68a; }
-.chip-red   { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
-.toolbar { padding: 10px 28px; background: white; border-bottom: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.toolbar input { padding: 6px 11px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; width: 250px; outline: none; background: #f8fafc; color: #0f172a; }
-.toolbar input:focus { border-color: #0069ff; background: white; box-shadow: 0 0 0 3px rgba(0,105,255,0.1); }
+header h1 { font-size: 18px; font-weight: 650; color: var(--ink); letter-spacing: -0.02em; }
+header p { font-size: 12px; color: var(--faint); margin-top: 3px; }
+
+/* Stat cards */
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.stat {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 11px;
+  padding: 12px 16px; min-width: 104px; transition: box-shadow .15s, transform .15s;
+}
+.stat:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.stat-val { font-size: 22px; font-weight: 680; color: var(--ink); letter-spacing: -0.03em; line-height: 1.1; }
+.stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+.stat.accent .stat-val { color: var(--blue); }
+.stat.flag .stat-val { color: var(--red); }
+
+/* Toolbar */
+.toolbar { padding: 14px 32px; background: var(--surface); border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.search-wrap { position: relative; }
+.search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--faint); pointer-events: none; }
+.toolbar input { padding: 8px 12px 8px 32px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; width: 268px; outline: none; background: var(--bg); color: var(--ink); font-family: inherit; transition: border-color .12s, box-shadow .12s, background .12s; }
+.toolbar input:focus { border-color: var(--blue); background: var(--surface); box-shadow: 0 0 0 3px rgba(31,111,235,.12); }
 .filters { display: flex; gap: 6px; }
-.filter-btn { padding: 5px 13px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; cursor: pointer; font-size: 12px; color: #64748b; transition: all 0.12s; font-weight: 500; }
-.filter-btn:hover { border-color: #0069ff; color: #0069ff; }
-.filter-btn.active { background: #0069ff; color: white; border-color: #0069ff; }
-.count { margin-left: auto; color: #94a3b8; font-size: 12px; }
-.table-wrap { padding: 20px 28px 48px; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.07); min-width: 1400px; }
-thead tr { background: #0f172a; }
-th { padding: 10px 14px; text-align: left; font-weight: 500; font-size: 10px; white-space: nowrap; cursor: pointer; user-select: none; position: sticky; top: 0; background: #0f172a; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; z-index: 10; }
-th:hover { background: #1e293b; color: #cbd5e1; }
+.filter-btn { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 12.5px; color: var(--ink-2); transition: all .12s; font-weight: 500; font-family: inherit; }
+.filter-btn:hover { border-color: #cfd4dc; background: var(--bg); }
+.filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.count { margin-left: auto; color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+
+/* Table */
+.table-wrap { padding: 22px 32px 56px; overflow-x: auto; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); min-width: 1480px; }
+thead th { padding: 11px 14px; text-align: left; font-weight: 600; font-size: 10.5px; white-space: nowrap; cursor: pointer; user-select: none; background: #fbfbfc; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; transition: color .12s; box-shadow: 0 1px 0 var(--line); }
+thead th:hover { color: var(--ink); }
 th.no-sort { cursor: default; }
-th.no-sort:hover { background: #0f172a; color: #64748b; }
-.sort-icon { margin-left: 3px; opacity: 0.5; font-style: normal; }
-td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: top; color: #334155; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f8fafc; }
-tr.flagged-date td { background: #fff5f5; }
-tr.flagged-date td:first-child { border-left: 3px solid #fca5a5; padding-left: 11px; }
-tr.flagged-date:hover td { background: #fef2f2; }
+th.no-sort:hover { color: var(--muted); }
+.sort-icon { margin-left: 4px; opacity: 0.45; font-style: normal; font-size: 9px; }
+td { padding: 13px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; color: var(--ink-2); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background .1s; }
+tbody tr:hover td { background: #fbfcfd; }
+tr.flagged-date td { background: var(--red-soft); }
+tr.flagged-date td:first-child { box-shadow: inset 3px 0 0 var(--red); }
+tr.flagged-date:hover td { background: #fbe3e0; }
 tr.hidden { display: none !important; }
-a { color: #0069ff; text-decoration: none; font-weight: 500; }
-a:hover { text-decoration: underline; }
-.badge { display: inline-block; padding: 2px 7px; border-radius: 4px; color: white; font-size: 10px; font-weight: 600; margin: 1px 2px 1px 0; cursor: help; letter-spacing: 0.01em; }
-.badge-inference   { background: #0069ff; }
-.badge-routing     { background: #6e3fff; }
-.badge-spaces      { background: #00b4d8; }
-.badge-appplatform { background: #0096c7; }
-.badge-database    { background: #0077b6; }
-.badge-droplet     { background: #023e8a; }
-.badge-functions   { background: #48cae4; color: #0f172a; }
-.badge-none { background: #f1f5f9; color: #94a3b8; cursor: default; border: 1px solid #e2e8f0; }
-.leg { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-.leg-strong      { background: #dcfce7; color: #15803d; }
-.leg-partial     { background: #fef3c7; color: #b45309; }
-.leg-superficial { background: #fee2e2; color: #b91c1c; }
-.score    { text-align: center; font-weight: 700; font-size: 13px; }
-.s5 { color: #15803d; }
-.s4 { color: #16a34a; }
-.s3 { color: #d97706; }
-.s2 { color: #ea580c; }
-.s1 { color: #dc2626; }
-.sales-yes { display: inline-block; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: help; }
-.sales-no { color: #cbd5e1; font-size: 12px; }
-.date-flag    { color: #ef4444; font-weight: 600; font-size: 11px; }
-.date-ok      { color: #10b981; font-size: 11px; }
-.date-unknown { color: #cbd5e1; font-size: 11px; }
-.project-cell { min-width: 140px; }
-.project-cell .repo-path { color: #94a3b8; font-size: 10px; margin-top: 2px; }
-.project-cell .demo-link { font-size: 10px; margin-top: 3px; }
-.num-cell     { color: #94a3b8; font-size: 11px; text-align: center; width: 32px; }
-.tech-cell    { font-size: 10px; color: #64748b; max-width: 120px; line-height: 1.5; }
-.tldr-cell    { max-width: 220px; font-size: 12px; line-height: 1.5; color: #475569; }
-.notes-cell   { max-width: 180px; font-size: 11px; color: #94a3b8; line-height: 1.5; }
-.members-cell { text-align: center; font-size: 12px; color: #64748b; }
-.no-results   { text-align: center; padding: 56px; color: #94a3b8; font-size: 14px; }"""
+a { color: var(--blue); text-decoration: none; font-weight: 500; }
+a:hover { color: var(--blue-dark); text-decoration: underline; }
+
+/* Project cell */
+.project-cell { min-width: 158px; }
+.project-name { font-weight: 600; color: var(--ink); font-size: 13.5px; }
+.project-name:hover { color: var(--blue); }
+.project-cell .repo-path { color: var(--faint); font-size: 11px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.project-cell .demo-link { display: inline-block; font-size: 11px; margin-top: 5px; color: var(--muted); font-weight: 500; }
+.project-cell .demo-link:hover { color: var(--blue); }
+
+/* Badges */
+.badge { display: inline-block; padding: 2.5px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 600; margin: 1px 3px 1px 0; cursor: help; letter-spacing: 0.005em; border: 1px solid transparent; }
+.badge-inference   { background: var(--blue-soft); color: var(--blue-dark); border-color: #cfe0fb; }
+.badge-routing     { background: #eee9fe; color: #5b34d6; border-color: #ddd2fb; }
+.badge-spaces      { background: #e3f5fb; color: #0a7ea4; border-color: #c5ebf5; }
+.badge-appplatform { background: #e1f1f8; color: #0769a0; border-color: #c2e3f1; }
+.badge-database    { background: #e2eefb; color: #1559a8; border-color: #c6ddf6; }
+.badge-droplet     { background: #e4ecfb; color: #1a3e8c; border-color: #ccd9f4; }
+.badge-functions   { background: #e6f7fb; color: #0a8bb0; border-color: #c8edf5; }
+.badge-none { color: var(--faint); font-size: 13px; }
+
+/* Legitimacy */
+.leg { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.dot-green { background: var(--green); } .dot-amber { background: var(--amber); } .dot-gray { background: var(--faint); }
+.leg-strong      { background: var(--green-soft); color: var(--green); }
+.leg-partial     { background: var(--amber-soft); color: var(--amber); }
+.leg-superficial { background: var(--gray-soft); color: var(--muted); }
+
+/* Total score */
+.total-cell { min-width: 92px; }
+.total-wrap { display: flex; align-items: baseline; gap: 3px; }
+.total-num { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.total-max { font-size: 11px; color: var(--faint); }
+.total-bar { flex-basis: 100%; height: 4px; background: var(--line); border-radius: 3px; margin-top: 7px; overflow: hidden; align-self: stretch; }
+.total-fill { height: 100%; border-radius: 3px; }
+.t-high { color: var(--green); } .total-fill.t-high { background: var(--green); }
+.t-mid  { color: var(--amber); } .total-fill.t-mid  { background: var(--amber); }
+.t-low  { color: var(--red); }   .total-fill.t-low  { background: var(--red); }
+
+/* Sub-scores */
+.score { text-align: center; font-weight: 650; font-size: 13px; font-variant-numeric: tabular-nums; }
+.s5 { color: var(--green); } .s4 { color: #2f9e5f; } .s3 { color: var(--amber); } .s2 { color: #c2541f; } .s1 { color: var(--red); }
+
+/* Pills / misc */
+.pill { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: help; }
+.pill-sales { background: var(--blue-soft); color: var(--blue-dark); border: 1px solid #cfe0fb; }
+.muted { color: var(--faint); font-size: 13px; }
+.sales-col { white-space: nowrap; }
+
+/* Judged by */
+.judge-col { min-width: 96px; }
+.judge { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+.judge-avatar { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.j-amit     { background: #1f6feb; }
+.j-santhosh { background: #1a7f4b; }
+.j-meghan   { background: #b4530a; }
+.judge-note { display: block; font-size: 10.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.date-flag    { color: var(--red); font-weight: 600; font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.date-ok      { color: var(--green); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.date-unknown { color: var(--faint); font-size: 12px; }
+.num-cell     { color: var(--faint); font-size: 11.5px; text-align: center; width: 36px; font-variant-numeric: tabular-nums; }
+.members-cell { text-align: center; font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.tech-cell    { font-size: 11px; color: var(--muted); max-width: 130px; line-height: 1.5; }
+.tldr-cell    { max-width: 252px; font-size: 12.5px; line-height: 1.55; color: var(--ink-2); }
+.notes-cell   { max-width: 196px; font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+.no-results   { text-align: center; padding: 64px; color: var(--muted); font-size: 14px; }"""
 
 JS = """
 let currentFilter = 'all';
@@ -350,10 +441,12 @@ function applyFilters() {
     const name  = r.dataset.name  || '';
     const tldr  = r.dataset.tldr  || '';
     const notes = r.dataset.notes || '';
-    const matchSearch = !q || name.includes(q) || tldr.includes(q) || notes.includes(q);
+    const judge = r.dataset.judge || '';
+    const matchSearch = !q || name.includes(q) || tldr.includes(q) || notes.includes(q) || judge.includes(q);
     const matchFilter =
       currentFilter === 'all'      ? true :
       currentFilter === 'verified' ? r.dataset.verified === 'true' :
+      currentFilter === 'judged'   ? r.dataset.judge    !== '' :
       currentFilter === 'flagged'  ? r.dataset.flagged  === 'true' :
       currentFilter === 'sales'    ? r.dataset.sales    === 'true' : true;
     const show = matchSearch && matchFilter;
@@ -387,6 +480,9 @@ function sortTable(col) {
   });
   rows.forEach(r => tbody.appendChild(r));
 }
+
+// Default: sort by Total score descending on load
+sortTable(7); sortTable(7);
 """
 
 HTML = f"""<!DOCTYPE html>
@@ -399,26 +495,32 @@ HTML = f"""<!DOCTYPE html>
 </head>
 <body>
 <header>
-  <div class="header-left">
-    <div class="do-mark">DO</div>
-    <div>
-      <h1>AIE Hackathon 2026 &middot; Project Analysis</h1>
-      <p>June 27&ndash;28, 2026 &nbsp;&middot;&nbsp; Generated {gen_ts} &nbsp;&middot;&nbsp; Internal use only</p>
+  <div class="header-top">
+    <div class="header-left">
+      <div class="do-mark">DO</div>
+      <div>
+        <h1>AIE Hackathon 2026 &middot; Project Analysis</h1>
+        <p>June 27&ndash;28, 2026 &nbsp;&middot;&nbsp; Generated {gen_ts} &nbsp;&middot;&nbsp; Internal use only</p>
+      </div>
     </div>
   </div>
   <div class="stats">
-    <span class="chip">{total} projects</span>
-    <span class="chip chip-blue">{do_strong} DO strong</span>
-    <span class="chip chip-green">{do_any} DO detected</span>
-    <span class="chip chip-amber">{sales_ct} sales flags</span>
-    <span class="chip chip-red">{flagged_ct} date flagged</span>
+    <div class="stat"><div class="stat-val">{total}</div><div class="stat-label">Projects</div></div>
+    <div class="stat accent"><div class="stat-val">{do_strong}</div><div class="stat-label">DO Strong</div></div>
+    <div class="stat accent"><div class="stat-val">{do_any}</div><div class="stat-label">DO Detected</div></div>
+    <div class="stat"><div class="stat-val">{sales_ct}</div><div class="stat-label">Sales Flags</div></div>
+    <div class="stat flag"><div class="stat-val">{flagged_ct}</div><div class="stat-label">Date Flagged</div></div>
   </div>
 </header>
 <div class="toolbar">
-  <input type="text" id="search" placeholder="Search projects, TLDRs, notes..." oninput="applyFilters()">
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="search" placeholder="Search projects, TLDRs, notes, judges..." oninput="applyFilters()">
+  </div>
   <div class="filters">
     <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
     <button class="filter-btn" onclick="setFilter(this,'verified')">DO Detected</button>
+    <button class="filter-btn" onclick="setFilter(this,'judged')">Judged</button>
     <button class="filter-btn" onclick="setFilter(this,'flagged')">Date Flagged</button>
     <button class="filter-btn" onclick="setFilter(this,'sales')">Sales Flag</button>
   </div>
@@ -435,12 +537,13 @@ HTML = f"""<!DOCTYPE html>
       <th class="no-sort">Partner Tech</th>
       <th class="no-sort">DO Services</th>
       <th onclick="sortTable(6)">Legitimacy <i class="sort-icon" id="si-6">&#8597;</i></th>
-      <th onclick="sortTable(7)">Use Case <i class="sort-icon" id="si-7">&#8597;</i></th>
-      <th onclick="sortTable(8)">Unique <i class="sort-icon" id="si-8">&#8597;</i></th>
-      <th onclick="sortTable(9)">Difficulty <i class="sort-icon" id="si-9">&#8597;</i></th>
-      <th onclick="sortTable(10)">DO Depth <i class="sort-icon" id="si-10">&#8597;</i></th>
-      <th onclick="sortTable(11)">Sales <i class="sort-icon" id="si-11">&#8597;</i></th>
-      <th onclick="sortTable(12)">First Commit <i class="sort-icon" id="si-12">&#8597;</i></th>
+      <th onclick="sortTable(7)">Total <i class="sort-icon" id="si-7">&#8597;</i></th>
+      <th onclick="sortTable(8)">Use Case <i class="sort-icon" id="si-8">&#8597;</i></th>
+      <th onclick="sortTable(9)">Unique <i class="sort-icon" id="si-9">&#8597;</i></th>
+      <th onclick="sortTable(10)">Difficulty <i class="sort-icon" id="si-10">&#8597;</i></th>
+      <th onclick="sortTable(11)">DO Depth <i class="sort-icon" id="si-11">&#8597;</i></th>
+      <th onclick="sortTable(12)">Sales <i class="sort-icon" id="si-12">&#8597;</i></th>
+      <th onclick="sortTable(13)">Judged By <i class="sort-icon" id="si-13">&#8597;</i></th>
       <th class="no-sort">Notes</th>
     </tr>
   </thead>

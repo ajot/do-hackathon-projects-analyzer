@@ -4,112 +4,171 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIE Hackathon 2026 - Project Analysis</title>
-<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<style>:root {
+  --ink: #1a1a1a; --ink-2: #3c4257; --muted: #697386; --faint: #8792a2;
+  --line: #e6e8eb; --line-soft: #f0f1f3; --bg: #f6f8fa; --surface: #ffffff;
+  --blue: #1f6feb; --blue-dark: #1551b8; --blue-soft: #eaf1fe;
+  --green: #1a7f4b; --green-soft: #e6f6ed; --amber: #9a6a00; --amber-soft: #fdf3e0;
+  --red: #c0362c; --red-soft: #fcebe9; --gray-soft: #eef0f2;
+  --shadow: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+  --shadow-lg: 0 4px 16px rgba(16,24,40,.08), 0 1px 3px rgba(16,24,40,.06);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  background: #f1f5f9; color: #0f172a; font-size: 14px;
-  border-top: 3px solid #0069ff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--ink-2); font-size: 13.5px; line-height: 1.5;
 }
-header {
-  background: white; padding: 16px 28px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid #e2e8f0;
-}
-.header-left { display: flex; align-items: center; gap: 12px; }
+
+/* Header */
+header { background: var(--surface); padding: 22px 32px 20px; border-bottom: 1px solid var(--line); }
+.header-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.header-left { display: flex; align-items: center; gap: 13px; }
 .do-mark {
-  width: 34px; height: 34px; background: #0069ff; border-radius: 7px;
+  width: 36px; height: 36px; background: var(--ink); border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  color: white; font-weight: 700; font-size: 12px; flex-shrink: 0;
+  color: #fff; font-weight: 700; font-size: 13px; letter-spacing: -0.02em; flex-shrink: 0;
 }
-header h1 { font-size: 15px; font-weight: 600; color: #0f172a; }
-header p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
-.stats { display: flex; gap: 6px; }
-.chip { padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 500; border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b; }
-.chip-blue  { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-.chip-green { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
-.chip-amber { background: #fffbeb; color: #92400e; border-color: #fde68a; }
-.chip-red   { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
-.toolbar { padding: 10px 28px; background: white; border-bottom: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.toolbar input { padding: 6px 11px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; width: 250px; outline: none; background: #f8fafc; color: #0f172a; }
-.toolbar input:focus { border-color: #0069ff; background: white; box-shadow: 0 0 0 3px rgba(0,105,255,0.1); }
+header h1 { font-size: 18px; font-weight: 650; color: var(--ink); letter-spacing: -0.02em; }
+header p { font-size: 12px; color: var(--faint); margin-top: 3px; }
+
+/* Stat cards */
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.stat {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 11px;
+  padding: 12px 16px; min-width: 104px; transition: box-shadow .15s, transform .15s;
+}
+.stat:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.stat-val { font-size: 22px; font-weight: 680; color: var(--ink); letter-spacing: -0.03em; line-height: 1.1; }
+.stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+.stat.accent .stat-val { color: var(--blue); }
+.stat.flag .stat-val { color: var(--red); }
+
+/* Toolbar */
+.toolbar { padding: 14px 32px; background: var(--surface); border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.search-wrap { position: relative; }
+.search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--faint); pointer-events: none; }
+.toolbar input { padding: 8px 12px 8px 32px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; width: 268px; outline: none; background: var(--bg); color: var(--ink); font-family: inherit; transition: border-color .12s, box-shadow .12s, background .12s; }
+.toolbar input:focus { border-color: var(--blue); background: var(--surface); box-shadow: 0 0 0 3px rgba(31,111,235,.12); }
 .filters { display: flex; gap: 6px; }
-.filter-btn { padding: 5px 13px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; cursor: pointer; font-size: 12px; color: #64748b; transition: all 0.12s; font-weight: 500; }
-.filter-btn:hover { border-color: #0069ff; color: #0069ff; }
-.filter-btn.active { background: #0069ff; color: white; border-color: #0069ff; }
-.count { margin-left: auto; color: #94a3b8; font-size: 12px; }
-.table-wrap { padding: 20px 28px 48px; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.07); min-width: 1400px; }
-thead tr { background: #0f172a; }
-th { padding: 10px 14px; text-align: left; font-weight: 500; font-size: 10px; white-space: nowrap; cursor: pointer; user-select: none; position: sticky; top: 0; background: #0f172a; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; z-index: 10; }
-th:hover { background: #1e293b; color: #cbd5e1; }
+.filter-btn { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 12.5px; color: var(--ink-2); transition: all .12s; font-weight: 500; font-family: inherit; }
+.filter-btn:hover { border-color: #cfd4dc; background: var(--bg); }
+.filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.count { margin-left: auto; color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+
+/* Table */
+.table-wrap { padding: 22px 32px 56px; overflow-x: auto; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); min-width: 1480px; }
+thead th { padding: 11px 14px; text-align: left; font-weight: 600; font-size: 10.5px; white-space: nowrap; cursor: pointer; user-select: none; background: #fbfbfc; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; transition: color .12s; box-shadow: 0 1px 0 var(--line); }
+thead th:hover { color: var(--ink); }
 th.no-sort { cursor: default; }
-th.no-sort:hover { background: #0f172a; color: #64748b; }
-.sort-icon { margin-left: 3px; opacity: 0.5; font-style: normal; }
-td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: top; color: #334155; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f8fafc; }
-tr.flagged-date td { background: #fff5f5; }
-tr.flagged-date td:first-child { border-left: 3px solid #fca5a5; padding-left: 11px; }
-tr.flagged-date:hover td { background: #fef2f2; }
+th.no-sort:hover { color: var(--muted); }
+.sort-icon { margin-left: 4px; opacity: 0.45; font-style: normal; font-size: 9px; }
+td { padding: 13px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; color: var(--ink-2); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background .1s; }
+tbody tr:hover td { background: #fbfcfd; }
+tr.flagged-date td { background: var(--red-soft); }
+tr.flagged-date td:first-child { box-shadow: inset 3px 0 0 var(--red); }
+tr.flagged-date:hover td { background: #fbe3e0; }
 tr.hidden { display: none !important; }
-a { color: #0069ff; text-decoration: none; font-weight: 500; }
-a:hover { text-decoration: underline; }
-.badge { display: inline-block; padding: 2px 7px; border-radius: 4px; color: white; font-size: 10px; font-weight: 600; margin: 1px 2px 1px 0; cursor: help; letter-spacing: 0.01em; }
-.badge-inference   { background: #0069ff; }
-.badge-routing     { background: #6e3fff; }
-.badge-spaces      { background: #00b4d8; }
-.badge-appplatform { background: #0096c7; }
-.badge-database    { background: #0077b6; }
-.badge-droplet     { background: #023e8a; }
-.badge-functions   { background: #48cae4; color: #0f172a; }
-.badge-none { background: #f1f5f9; color: #94a3b8; cursor: default; border: 1px solid #e2e8f0; }
-.leg { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-.leg-strong      { background: #dcfce7; color: #15803d; }
-.leg-partial     { background: #fef3c7; color: #b45309; }
-.leg-superficial { background: #fee2e2; color: #b91c1c; }
-.score    { text-align: center; font-weight: 700; font-size: 13px; }
-.s5 { color: #15803d; }
-.s4 { color: #16a34a; }
-.s3 { color: #d97706; }
-.s2 { color: #ea580c; }
-.s1 { color: #dc2626; }
-.sales-yes { display: inline-block; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: help; }
-.sales-no { color: #cbd5e1; font-size: 12px; }
-.date-flag    { color: #ef4444; font-weight: 600; font-size: 11px; }
-.date-ok      { color: #10b981; font-size: 11px; }
-.date-unknown { color: #cbd5e1; font-size: 11px; }
-.project-cell { min-width: 140px; }
-.project-cell .repo-path { color: #94a3b8; font-size: 10px; margin-top: 2px; }
-.project-cell .demo-link { font-size: 10px; margin-top: 3px; }
-.num-cell     { color: #94a3b8; font-size: 11px; text-align: center; width: 32px; }
-.tech-cell    { font-size: 10px; color: #64748b; max-width: 120px; line-height: 1.5; }
-.tldr-cell    { max-width: 220px; font-size: 12px; line-height: 1.5; color: #475569; }
-.notes-cell   { max-width: 180px; font-size: 11px; color: #94a3b8; line-height: 1.5; }
-.members-cell { text-align: center; font-size: 12px; color: #64748b; }
-.no-results   { text-align: center; padding: 56px; color: #94a3b8; font-size: 14px; }</style>
+a { color: var(--blue); text-decoration: none; font-weight: 500; }
+a:hover { color: var(--blue-dark); text-decoration: underline; }
+
+/* Project cell */
+.project-cell { min-width: 158px; }
+.project-name { font-weight: 600; color: var(--ink); font-size: 13.5px; }
+.project-name:hover { color: var(--blue); }
+.project-cell .repo-path { color: var(--faint); font-size: 11px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.project-cell .demo-link { display: inline-block; font-size: 11px; margin-top: 5px; color: var(--muted); font-weight: 500; }
+.project-cell .demo-link:hover { color: var(--blue); }
+
+/* Badges */
+.badge { display: inline-block; padding: 2.5px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 600; margin: 1px 3px 1px 0; cursor: help; letter-spacing: 0.005em; border: 1px solid transparent; }
+.badge-inference   { background: var(--blue-soft); color: var(--blue-dark); border-color: #cfe0fb; }
+.badge-routing     { background: #eee9fe; color: #5b34d6; border-color: #ddd2fb; }
+.badge-spaces      { background: #e3f5fb; color: #0a7ea4; border-color: #c5ebf5; }
+.badge-appplatform { background: #e1f1f8; color: #0769a0; border-color: #c2e3f1; }
+.badge-database    { background: #e2eefb; color: #1559a8; border-color: #c6ddf6; }
+.badge-droplet     { background: #e4ecfb; color: #1a3e8c; border-color: #ccd9f4; }
+.badge-functions   { background: #e6f7fb; color: #0a8bb0; border-color: #c8edf5; }
+.badge-none { color: var(--faint); font-size: 13px; }
+
+/* Legitimacy */
+.leg { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.dot-green { background: var(--green); } .dot-amber { background: var(--amber); } .dot-gray { background: var(--faint); }
+.leg-strong      { background: var(--green-soft); color: var(--green); }
+.leg-partial     { background: var(--amber-soft); color: var(--amber); }
+.leg-superficial { background: var(--gray-soft); color: var(--muted); }
+
+/* Total score */
+.total-cell { min-width: 92px; }
+.total-wrap { display: flex; align-items: baseline; gap: 3px; }
+.total-num { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.total-max { font-size: 11px; color: var(--faint); }
+.total-bar { flex-basis: 100%; height: 4px; background: var(--line); border-radius: 3px; margin-top: 7px; overflow: hidden; align-self: stretch; }
+.total-fill { height: 100%; border-radius: 3px; }
+.t-high { color: var(--green); } .total-fill.t-high { background: var(--green); }
+.t-mid  { color: var(--amber); } .total-fill.t-mid  { background: var(--amber); }
+.t-low  { color: var(--red); }   .total-fill.t-low  { background: var(--red); }
+
+/* Sub-scores */
+.score { text-align: center; font-weight: 650; font-size: 13px; font-variant-numeric: tabular-nums; }
+.s5 { color: var(--green); } .s4 { color: #2f9e5f; } .s3 { color: var(--amber); } .s2 { color: #c2541f; } .s1 { color: var(--red); }
+
+/* Pills / misc */
+.pill { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: help; }
+.pill-sales { background: var(--blue-soft); color: var(--blue-dark); border: 1px solid #cfe0fb; }
+.muted { color: var(--faint); font-size: 13px; }
+.sales-col { white-space: nowrap; }
+
+/* Judged by */
+.judge-col { min-width: 96px; }
+.judge { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+.judge-avatar { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.j-amit     { background: #1f6feb; }
+.j-santhosh { background: #1a7f4b; }
+.j-meghan   { background: #b4530a; }
+.judge-note { display: block; font-size: 10.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.date-flag    { color: var(--red); font-weight: 600; font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.date-ok      { color: var(--green); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.date-unknown { color: var(--faint); font-size: 12px; }
+.num-cell     { color: var(--faint); font-size: 11.5px; text-align: center; width: 36px; font-variant-numeric: tabular-nums; }
+.members-cell { text-align: center; font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.tech-cell    { font-size: 11px; color: var(--muted); max-width: 130px; line-height: 1.5; }
+.tldr-cell    { max-width: 252px; font-size: 12.5px; line-height: 1.55; color: var(--ink-2); }
+.notes-cell   { max-width: 196px; font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+.no-results   { text-align: center; padding: 64px; color: var(--muted); font-size: 14px; }</style>
 </head>
 <body>
 <header>
-  <div class="header-left">
-    <div class="do-mark">DO</div>
-    <div>
-      <h1>AIE Hackathon 2026 &middot; Project Analysis</h1>
-      <p>June 27&ndash;28, 2026 &nbsp;&middot;&nbsp; Generated 2026-06-28 21:04 UTC &nbsp;&middot;&nbsp; Internal use only</p>
+  <div class="header-top">
+    <div class="header-left">
+      <div class="do-mark">DO</div>
+      <div>
+        <h1>AIE Hackathon 2026 &middot; Project Analysis</h1>
+        <p>June 27&ndash;28, 2026 &nbsp;&middot;&nbsp; Generated 2026-06-28 21:19 UTC &nbsp;&middot;&nbsp; Internal use only</p>
+      </div>
     </div>
   </div>
   <div class="stats">
-    <span class="chip">69 projects</span>
-    <span class="chip chip-blue">12 DO strong</span>
-    <span class="chip chip-green">28 DO detected</span>
-    <span class="chip chip-amber">25 sales flags</span>
-    <span class="chip chip-red">1 date flagged</span>
+    <div class="stat"><div class="stat-val">69</div><div class="stat-label">Projects</div></div>
+    <div class="stat accent"><div class="stat-val">12</div><div class="stat-label">DO Strong</div></div>
+    <div class="stat accent"><div class="stat-val">28</div><div class="stat-label">DO Detected</div></div>
+    <div class="stat"><div class="stat-val">25</div><div class="stat-label">Sales Flags</div></div>
+    <div class="stat flag"><div class="stat-val">1</div><div class="stat-label">Date Flagged</div></div>
   </div>
 </header>
 <div class="toolbar">
-  <input type="text" id="search" placeholder="Search projects, TLDRs, notes..." oninput="applyFilters()">
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="search" placeholder="Search projects, TLDRs, notes, judges..." oninput="applyFilters()">
+  </div>
   <div class="filters">
     <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
     <button class="filter-btn" onclick="setFilter(this,'verified')">DO Detected</button>
+    <button class="filter-btn" onclick="setFilter(this,'judged')">Judged</button>
     <button class="filter-btn" onclick="setFilter(this,'flagged')">Date Flagged</button>
     <button class="filter-btn" onclick="setFilter(this,'sales')">Sales Flag</button>
   </div>
@@ -126,911 +185,981 @@ a:hover { text-decoration: underline; }
       <th class="no-sort">Partner Tech</th>
       <th class="no-sort">DO Services</th>
       <th onclick="sortTable(6)">Legitimacy <i class="sort-icon" id="si-6">&#8597;</i></th>
-      <th onclick="sortTable(7)">Use Case <i class="sort-icon" id="si-7">&#8597;</i></th>
-      <th onclick="sortTable(8)">Unique <i class="sort-icon" id="si-8">&#8597;</i></th>
-      <th onclick="sortTable(9)">Difficulty <i class="sort-icon" id="si-9">&#8597;</i></th>
-      <th onclick="sortTable(10)">DO Depth <i class="sort-icon" id="si-10">&#8597;</i></th>
-      <th onclick="sortTable(11)">Sales <i class="sort-icon" id="si-11">&#8597;</i></th>
-      <th onclick="sortTable(12)">First Commit <i class="sort-icon" id="si-12">&#8597;</i></th>
+      <th onclick="sortTable(7)">Total <i class="sort-icon" id="si-7">&#8597;</i></th>
+      <th onclick="sortTable(8)">Use Case <i class="sort-icon" id="si-8">&#8597;</i></th>
+      <th onclick="sortTable(9)">Unique <i class="sort-icon" id="si-9">&#8597;</i></th>
+      <th onclick="sortTable(10)">Difficulty <i class="sort-icon" id="si-10">&#8597;</i></th>
+      <th onclick="sortTable(11)">DO Depth <i class="sort-icon" id="si-11">&#8597;</i></th>
+      <th onclick="sortTable(12)">Sales <i class="sort-icon" id="si-12">&#8597;</i></th>
+      <th onclick="sortTable(13)">Judged By <i class="sort-icon" id="si-13">&#8597;</i></th>
       <th class="no-sort">Notes</th>
     </tr>
   </thead>
   <tbody id="tbody">
-    <tr class="" data-num="1" data-name="test submission" data-tldr="placeholder test submission." data-notes="test entry — ignore." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="1" data-name="test submission" data-tldr="placeholder test submission." data-notes="test entry — ignore." data-judge="" data-total="4" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">1</td>
-      <td class="project-cell"><a href="https://github.com/ecsbeats/testproject" target="_blank">Test Submission</a><div class="repo-path">ecsbeats/testproject</div><div class="demo-link"><a href="https://youtube.com/testvideo" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/ecsbeats/testproject" target="_blank">Test Submission</a><div class="repo-path">ecsbeats/testproject</div><a class="demo-link" href="https://youtube.com/testvideo" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Placeholder test submission.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-low">4</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-low" style="width:20%"></div></div></div></td>
       <td class="score s1">1</td><td class="score s1">1</td><td class="score s1">1</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Test entry — ignore.</td>
     </tr>
-    <tr class="" data-num="2" data-name="cowboys" data-tldr="evolutionary tournament where ai agents compete on the same web task, learn from" data-notes="elegant rsi via skill.md patching. typescript. strong entry for hackathon theme." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="2" data-name="cowboys" data-tldr="evolutionary tournament where ai agents compete on the same web task, learn from" data-notes="elegant rsi via skill.md patching. typescript. strong entry for hackathon theme." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">2</td>
-      <td class="project-cell"><a href="https://github.com/bilalpatoli/Agent-Arena" target="_blank">Cowboys</a><div class="repo-path">bilalpatoli/Agent-Arena</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/bilalpatoli/Agent-Arena" target="_blank">Cowboys</a><div class="repo-path">bilalpatoli/Agent-Arena</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Evolutionary tournament where AI agents compete on the same web task, learn from the winner via skill grafting, and get smarter every round.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Elegant RSI via SKILL.md patching. TypeScript. Strong entry for hackathon theme.</td>
     </tr>
-    <tr class="" data-num="3" data-name="rsi" data-tldr="recursive self-improving ai that fine-tunes its own weights from failures via lo" data-notes="do inference is the model backend. solo. meta/target agent + lora loop." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="3" data-name="rsi" data-tldr="recursive self-improving ai that fine-tunes its own weights from failures via lo" data-notes="do inference is the model backend. solo. meta/target agent + lora loop." data-judge="" data-total="15" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">3</td>
-      <td class="project-cell"><a href="https://github.com/whatdhack/recursive-self-improvement" target="_blank">RSI</a><div class="repo-path">whatdhack/recursive-self-improvement</div><div class="demo-link"><a href="https://github.com/whatdhack/recursive-self-improvement/blob/main/rsi_explainer.mp4" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/whatdhack/recursive-self-improvement" target="_blank">RSI</a><div class="repo-path">whatdhack/recursive-self-improvement</div><a class="demo-link" href="https://github.com/whatdhack/recursive-self-improvement/blob/main/rsi_explainer.mp4" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Recursive self-improving AI that fine-tunes its own weights from failures via LoRA, using DO Inference (inference.do-ai.run) as the OpenAI-compatible model backend.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title="README.md: | `OPENAI_BASE_URL` | `https://inference.do-ai.run/v1/` |">Inference</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="DO Inference set as OPENAI_BASE_URL for the RSI loop. Real inference customer.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="DO Inference set as OPENAI_BASE_URL for the RSI loop. Real inference customer.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">DO Inference is the model backend. Solo. Meta/target agent + LoRA loop.</td>
     </tr>
-    <tr class="" data-num="4" data-name="shake" data-tldr="interactive 3d earthquake prediction simulator for the sf bay area with real sei" data-notes="creative geo-relevant demo. deployed on google cloud run." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="4" data-name="shake" data-tldr="interactive 3d earthquake prediction simulator for the sf bay area with real sei" data-notes="creative geo-relevant demo. deployed on google cloud run." data-judge="" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">4</td>
-      <td class="project-cell"><a href="https://github.com/mochiyaki/shake" target="_blank">shake</a><div class="repo-path">mochiyaki/shake</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/mochiyaki/shake" target="_blank">shake</a><div class="repo-path">mochiyaki/shake</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Interactive 3D earthquake prediction simulator for the SF Bay Area with real seismic data and damage estimation, rendered entirely in-browser with Three.js.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Creative geo-relevant demo. Deployed on Google Cloud Run.</td>
     </tr>
-    <tr class="" data-num="5" data-name="field-ratchet: a recursively self-improving ai for pcb design." data-tldr="self-improving pcb layout compiler: feed it a kicad schematic and it autonomousl" data-notes="17 files. genuinely novel — ai pcb layout is a hard unsolved problem. no do usage." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="5" data-name="field-ratchet: a recursively self-improving ai for pcb design." data-tldr="self-improving pcb layout compiler: feed it a kicad schematic and it autonomousl" data-notes="17 files. genuinely novel — ai pcb layout is a hard unsolved problem. no do usage." data-judge="" data-total="15" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">5</td>
-      <td class="project-cell"><a href="https://github.com/JacobFV/fieldratchet" target="_blank">field-ratchet: a recursively self-improving AI for PCB design.</a><div class="repo-path">JacobFV/fieldratchet</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/JacobFV/fieldratchet" target="_blank">field-ratchet: a recursively self-improving AI for PCB design.</a><div class="repo-path">JacobFV/fieldratchet</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Self-improving PCB layout compiler: feed it a KiCad schematic and it autonomously parses, places, routes, and scores a real board.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">17 files. Genuinely novel — AI PCB layout is a hard unsolved problem. No DO usage.</td>
     </tr>
-    <tr class="" data-num="6" data-name="atlantis" data-tldr="rl agent (grpo + lora) that learns person-specific privacy attacks that bypass u" data-notes="16 files. strong adversarial rsi angle. no do usage." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="6" data-name="atlantis" data-tldr="rl agent (grpo + lora) that learns person-specific privacy attacks that bypass u" data-notes="16 files. strong adversarial rsi angle. no do usage." data-judge="" data-total="14" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">6</td>
-      <td class="project-cell"><a href="https://github.com/Bestpart-Irene/RL-persona-red-team-agent" target="_blank">Atlantis</a><div class="repo-path">Bestpart-Irene/RL-persona-red-team-agent</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Bestpart-Irene/RL-persona-red-team-agent" target="_blank">Atlantis</a><div class="repo-path">Bestpart-Irene/RL-persona-red-team-agent</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">RL agent (GRPO + LoRA) that learns person-specific privacy attacks that bypass universal safety filters, recursively improving its own curriculum.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">16 files. Strong adversarial RSI angle. No DO usage.</td>
     </tr>
-    <tr class="" data-num="7" data-name="agentic_ontology" data-tldr="eight ai agents continuously analyze live fed data, synthesized into a defi/cryp" data-notes="anthropic api. multi-agent ontology approach." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="7" data-name="agentic_ontology" data-tldr="eight ai agents continuously analyze live fed data, synthesized into a defi/cryp" data-notes="anthropic api. multi-agent ontology approach." data-judge="" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">7</td>
-      <td class="project-cell"><a href="https://github.com/adaboostmm/crypto-rsi-engine" target="_blank">agentic_ontology</a><div class="repo-path">adaboostmm/crypto-rsi-engine</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/adaboostmm/crypto-rsi-engine" target="_blank">agentic_ontology</a><div class="repo-path">adaboostmm/crypto-rsi-engine</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Eight AI agents continuously analyze live Fed data, synthesized into a DeFi/crypto regime verdict backed by an ontology knowledge graph.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s3">3</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Anthropic API. Multi-agent ontology approach.</td>
     </tr>
-    <tr class="" data-num="8" data-name="omnicon rsi" data-tldr="uses golden summaries from omnicon conversations to improve and benchmark conver" data-notes="17 files. benchmark-driven summarizer improvement. no do usage." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="8" data-name="omnicon rsi" data-tldr="uses golden summaries from omnicon conversations to improve and benchmark conver" data-notes="17 files. benchmark-driven summarizer improvement. no do usage." data-judge="" data-total="10" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">8</td>
-      <td class="project-cell"><a href="https://github.com/willdahl/omnicon-rsi" target="_blank">Omnicon RSI</a><div class="repo-path">willdahl/omnicon-rsi</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/willdahl/omnicon-rsi" target="_blank">Omnicon RSI</a><div class="repo-path">willdahl/omnicon-rsi</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Uses golden summaries from Omnicon conversations to improve and benchmark conversation summarizers.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-low">10</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-low" style="width:50%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">17 files. Benchmark-driven summarizer improvement. No DO usage.</td>
     </tr>
-    <tr class="" data-num="9" data-name="recursivelearner" data-tldr="training-free rsi via a 'lessons memory' — small model improves at bbh tasks wit" data-notes="do used for external proposals. clean rsi loop. solo." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="9" data-name="recursivelearner" data-tldr="training-free rsi via a 'lessons memory' — small model improves at bbh tasks wit" data-notes="do used for external proposals. clean rsi loop. solo." data-judge="" data-total="15" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">9</td>
-      <td class="project-cell"><a href="https://github.com/otceliker/ai-engineer-hackathon" target="_blank">RecursiveLearner</a><div class="repo-path">otceliker/ai-engineer-hackathon</div><div class="demo-link"><a href="https://youtube.com/" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/otceliker/ai-engineer-hackathon" target="_blank">RecursiveLearner</a><div class="repo-path">otceliker/ai-engineer-hackathon</div><a class="demo-link" href="https://youtube.com/" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Training-free RSI via a 'lessons memory' — small model improves at BBH tasks with zero weight updates; DO Inference is the external lesson proposer.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title="scripts/bbh_lab.py: r = requests.post("https://inference.do-ai.run/v1/chat/completions", json=payloa">Inference</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="Actively calling DO Inference API as external LLM proposer. Real inference customer.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Actively calling DO Inference API as external LLM proposer. Real inference customer.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">DO used for external proposals. Clean RSI loop. Solo.</td>
     </tr>
-    <tr class="" data-num="10" data-name="kevin durant" data-tldr="ai agent that teaches itself to operate nandgame (logic circuit browser game) by" data-notes="compelling capability-regression proof. gemini + browser-use." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="10" data-name="kevin durant" data-tldr="ai agent that teaches itself to operate nandgame (logic circuit browser game) by" data-notes="compelling capability-regression proof. gemini + browser-use." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">10</td>
-      <td class="project-cell"><a href="https://github.com/HoldenRichard/self-taught-operator" target="_blank">Kevin Durant</a><div class="repo-path">HoldenRichard/self-taught-operator</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/HoldenRichard/self-taught-operator" target="_blank">Kevin Durant</a><div class="repo-path">HoldenRichard/self-taught-operator</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">AI agent that teaches itself to operate NandGame (logic circuit browser game) by writing its own reusable skill library from real sessions — deletes skills and measures capability drop.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Compelling capability-regression proof. Gemini + browser-use.</td>
     </tr>
-    <tr class="" data-num="11" data-name="bonsai" data-tldr="turns domain experts into 'bonsai gardeners': they shape an ideal form once; the" data-notes="live on do app platform. 18 files. human-guided rsi framing." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="11" data-name="bonsai" data-tldr="turns domain experts into 'bonsai gardeners': they shape an ideal form once; the" data-notes="live on do app platform. 18 files. human-guided rsi framing." data-judge="" data-total="13" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">11</td>
-      <td class="project-cell"><a href="https://github.com/enturesting/bonsai" target="_blank">Bonsai</a><div class="repo-path">enturesting/bonsai</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/enturesting/bonsai" target="_blank">Bonsai</a><div class="repo-path">enturesting/bonsai</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Turns domain experts into 'bonsai gardeners': they shape an ideal form once; the system watches a cited-answer agent, catches untraceable citations, and clusters failures by meaning. Deployed live on DO App Platform.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: **🔗 Live demo (deployed on DigitalOcean App Platform): https://bonsai-h7rzp.ondigitalocea">App Platform</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Live production deploy on DO App Platform (bonsai-h7rzp.ondigitalocean.app) with a dedicated Dockerfile. Real deployment customer.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Live production deploy on DO App Platform (bonsai-h7rzp.ondigitalocean.app) with a dedicated Dockerfile. Real deployment customer.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Live on DO App Platform. 18 files. Human-guided RSI framing.</td>
     </tr>
-    <tr class="" data-num="12" data-name="veritas" data-tldr="silent ai agent that fact-checks live meetings in real time across 70+ languages" data-notes="gemini 3.5 live translate + livekit. strong real-world use case." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="12" data-name="veritas" data-tldr="silent ai agent that fact-checks live meetings in real time across 70+ languages" data-notes="gemini 3.5 live translate + livekit. strong real-world use case." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">12</td>
-      <td class="project-cell"><a href="https://github.com/Anish-100/AIEWF-Hackathon-2026" target="_blank">Veritas</a><div class="repo-path">Anish-100/AIEWF-Hackathon-2026</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Anish-100/AIEWF-Hackathon-2026" target="_blank">Veritas</a><div class="repo-path">Anish-100/AIEWF-Hackathon-2026</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Silent AI agent that fact-checks live meetings in real time across 70+ languages, matching spoken claims against a local database in 2ms.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Gemini 3.5 Live Translate + LiveKit. Strong real-world use case.</td>
     </tr>
-    <tr class="" data-num="13" data-name="two levers" data-tldr="self-improving dyna-q world model combining neo4j graph representation with the " data-notes="do mentioned as optional gpu host in runbook. sia + graphworldmodels combo." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="13" data-name="two levers" data-tldr="self-improving dyna-q world model combining neo4j graph representation with the " data-notes="do mentioned as optional gpu host in runbook. sia + graphworldmodels combo." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">13</td>
-      <td class="project-cell"><a href="https://github.com/dronomyio/worldmodel_sia" target="_blank">Two Levers</a><div class="repo-path">dronomyio/worldmodel_sia</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/dronomyio/worldmodel_sia" target="_blank">Two Levers</a><div class="repo-path">dronomyio/worldmodel_sia</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Self-improving Dyna-Q world model combining Neo4j graph representation with the SIA loop, visualizing learned room market dynamics in real time.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: > **Running on a cloud GPU?** See **STEPS.md** (Nebius L40 copy-paste) or **RUNBOOK.md** ">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">DO mentioned as optional GPU host in runbook. SIA + GraphWorldModels combo.</td>
     </tr>
-    <tr class="" data-num="14" data-name="evolora" data-tldr="auditable lora fine-tuning loop: minimax agent plans training, model trains on g" data-notes="claimed do credits at table. auditable ml loop. 3-person team." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="14" data-name="evolora" data-tldr="auditable lora fine-tuning loop: minimax agent plans training, model trains on g" data-notes="claimed do credits at table. auditable ml loop. 3-person team." data-judge="" data-total="16" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">14</td>
-      <td class="project-cell"><a href="https://github.com/Visual-Studio-Coder/EvoLoRA" target="_blank">EvoLoRA</a><div class="repo-path">Visual-Studio-Coder/EvoLoRA</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Visual-Studio-Coder/EvoLoRA" target="_blank">EvoLoRA</a><div class="repo-path">Visual-Studio-Coder/EvoLoRA</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Auditable LoRA fine-tuning loop: MiniMax agent plans training, model trains on GPU, DigitalOcean serves the LLM judge (llama3.3-70b-instruct) to score results.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title="README.md: | LLM-as-judge | `llama3.3-70b-instruct` | via DigitalOcean inference (`https://inference">Inference</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">16</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:80%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s5">5</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="3-person team using DO Inference as LLM judge. Claimed $200 DO credits onsite. Training loop is repeatable — ongoing inference spend likely.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="3-person team using DO Inference as LLM judge. Claimed $200 DO credits onsite. Training loop is repeatable — ongoing inference spend likely.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Claimed DO credits at table. Auditable ML loop. 3-person team.</td>
     </tr>
-    <tr class="" data-num="15" data-name="auto qa" data-tldr="self-improving qa agent that learns a product via gemini 3.5 computer use, then " data-notes="gemini 3.5 computer use + managed agents + playwright." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="15" data-name="auto qa" data-tldr="self-improving qa agent that learns a product via gemini 3.5 computer use, then " data-notes="gemini 3.5 computer use + managed agents + playwright." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">15</td>
-      <td class="project-cell"><a href="https://github.com/slab10000/auto-qa" target="_blank">Auto QA</a><div class="repo-path">slab10000/auto-qa</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/slab10000/auto-qa" target="_blank">Auto QA</a><div class="repo-path">slab10000/auto-qa</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Self-improving QA agent that learns a product via Gemini 3.5 Computer Use, then reviews PRs by visually testing the running app.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Gemini 3.5 Computer Use + Managed Agents + Playwright.</td>
     </tr>
-    <tr class="" data-num="16" data-name="substrata" data-tldr="satellite land-cover classifier that improves from its own mistakes without retr" data-notes="well-built 3-person project. real nasa/esa satellite data." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="16" data-name="substrata" data-tldr="satellite land-cover classifier that improves from its own mistakes without retr" data-notes="well-built 3-person project. real nasa/esa satellite data." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">16</td>
-      <td class="project-cell"><a href="https://github.com/gandhiaayush/spirit-land" target="_blank">SubStrata</a><div class="repo-path">gandhiaayush/spirit-land</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/gandhiaayush/spirit-land" target="_blank">SubStrata</a><div class="repo-path">gandhiaayush/spirit-land</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Satellite land-cover classifier that improves from its own mistakes without retraining — a Gemini Strategist writes plain-English lessons from classification failures.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Well-built 3-person project. Real NASA/ESA satellite data.</td>
     </tr>
-    <tr class="" data-num="17" data-name="piplan" data-tldr="continuous-learning memory separating durable beliefs (peft weight edits) from f" data-notes="tripartite memory architecture is genuinely novel. hot-loading weight edits is ambitious." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="17" data-name="piplan" data-tldr="continuous-learning memory separating durable beliefs (peft weight edits) from f" data-notes="tripartite memory architecture is genuinely novel. hot-loading weight edits is ambitious." data-judge="" data-total="15" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">17</td>
-      <td class="project-cell"><a href="https://github.com/xesws/AIEHackathon" target="_blank">PiPlan</a><div class="repo-path">xesws/AIEHackathon</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/xesws/AIEHackathon" target="_blank">PiPlan</a><div class="repo-path">xesws/AIEHackathon</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Continuous-learning memory separating durable beliefs (PEFT weight edits) from facts (RAG) and preferences (context), with hot-loading of weight edits live.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Tripartite memory architecture is genuinely novel. Hot-loading weight edits is ambitious.</td>
     </tr>
-    <tr class="" data-num="18" data-name="splatforge" data-tldr="robot manipulation agent that scans a scene into 3d gaussian splat, runs physics" data-notes="most ambitious project technically. 3dgs + sim-to-real + lora in 24h. 2-person team." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="18" data-name="splatforge" data-tldr="robot manipulation agent that scans a scene into 3d gaussian splat, runs physics" data-notes="most ambitious project technically. 3dgs + sim-to-real + lora in 24h. 2-person team." data-judge="" data-total="17" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">18</td>
-      <td class="project-cell"><a href="https://github.com/ShivamSinghNow/SplatForge" target="_blank">SplatForge</a><div class="repo-path">ShivamSinghNow/SplatForge</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/ShivamSinghNow/SplatForge" target="_blank">SplatForge</a><div class="repo-path">ShivamSinghNow/SplatForge</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Robot manipulation agent that scans a scene into 3D Gaussian Splat, runs physics rollouts, and LoRA fine-tunes on DO H100 Droplets — zero new human labels.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-droplet" title="README.md: | Fine-tune | PyTorch + LoRA/PEFT adapters, between loop iterations, on DigitalOcean **H1">Droplets</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">17</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:85%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Using DO H100 GPU Droplets for robotics LoRA training. Serious compute workload if project continues.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Using DO H100 GPU Droplets for robotics LoRA training. Serious compute workload if project continues.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Most ambitious project technically. 3DGS + sim-to-real + LoRA in 24h. 2-person team.</td>
     </tr>
-    <tr class="" data-num="19" data-name="opsgym" data-tldr="self-improving policy engine for ops teams: trains safe decision policies for bi" data-notes="live demo. ai alignment for operational decisions is a real market." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="19" data-name="opsgym" data-tldr="self-improving policy engine for ops teams: trains safe decision policies for bi" data-notes="live demo. ai alignment for operational decisions is a real market." data-judge="" data-total="14" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">19</td>
-      <td class="project-cell"><a href="https://github.com/thedatadavis/opsgym" target="_blank">OpsGym</a><div class="repo-path">thedatadavis/opsgym</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/thedatadavis/opsgym" target="_blank">OpsGym</a><div class="repo-path">thedatadavis/opsgym</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Self-improving policy engine for ops teams: trains safe decision policies for billing, fraud, SLA exceptions without rigid scripts. Live at opsgym.pdt.dev.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Live demo. AI alignment for operational decisions is a real market.</td>
     </tr>
-    <tr class="" data-num="20" data-name="acmebox" data-tldr="fine-tunes company-specific customer support models with effectts rest api, mcp " data-notes="typescript monorepo. custom eval bench is interesting." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="20" data-name="acmebox" data-tldr="fine-tunes company-specific customer support models with effectts rest api, mcp " data-notes="typescript monorepo. custom eval bench is interesting." data-judge="" data-total="12" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">20</td>
-      <td class="project-cell"><a href="https://github.com/ayukumar261/AcmeBox" target="_blank">AcmeBox</a><div class="repo-path">ayukumar261/AcmeBox</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/ayukumar261/AcmeBox" target="_blank">AcmeBox</a><div class="repo-path">ayukumar261/AcmeBox</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Fine-tunes company-specific customer support models with EffectTS REST API, MCP Server, and a custom AcmeBox Bench eval benchmark.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">12</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:60%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">TypeScript monorepo. Custom eval bench is interesting.</td>
     </tr>
-    <tr class="" data-num="21" data-name="autodiscover" data-tldr="chrome extension where a managed agent with persistent memory decides per-user w" data-notes="gemini antigravity interactions api. personalized ui adaptation is interesting." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="21" data-name="autodiscover" data-tldr="chrome extension where a managed agent with persistent memory decides per-user w" data-notes="gemini antigravity interactions api. personalized ui adaptation is interesting." data-judge="" data-total="12" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">21</td>
-      <td class="project-cell"><a href="https://github.com/ImTimTong/autodiscover" target="_blank">autodiscover</a><div class="repo-path">ImTimTong/autodiscover</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/ImTimTong/autodiscover" target="_blank">autodiscover</a><div class="repo-path">ImTimTong/autodiscover</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Chrome extension where a managed agent with persistent memory decides per-user whether to apply, reject, or adapt product UI changes — using X as a case study.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">12</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:60%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Gemini Antigravity Interactions API. Personalized UI adaptation is interesting.</td>
     </tr>
-    <tr class="" data-num="22" data-name="recallroom" data-tldr="chrome extension that captures lecture video/audio, sends frames to gemini compu" data-notes="okf learner model is the interesting persistent layer. gemini computer use." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="22" data-name="recallroom" data-tldr="chrome extension that captures lecture video/audio, sends frames to gemini compu" data-notes="okf learner model is the interesting persistent layer. gemini computer use." data-judge="" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">22</td>
-      <td class="project-cell"><a href="https://github.com/potatoman03/recallroom" target="_blank">Recallroom</a><div class="repo-path">potatoman03/recallroom</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/potatoman03/recallroom" target="_blank">Recallroom</a><div class="repo-path">potatoman03/recallroom</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Chrome extension that captures lecture video/audio, sends frames to Gemini Computer Use, and builds a learner knowledge base that sharpens each session.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">OKF learner model is the interesting persistent layer. Gemini Computer Use.</td>
     </tr>
-    <tr class="" data-num="23" data-name="rsiw" data-tldr="rl curriculum where vertex ai gemini designs environments, writes mujoco reward " data-notes="technically deep. world design + reward synthesis loop. vertex ai, not do." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="23" data-name="rsiw" data-tldr="rl curriculum where vertex ai gemini designs environments, writes mujoco reward " data-notes="technically deep. world design + reward synthesis loop. vertex ai, not do." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">23</td>
-      <td class="project-cell"><a href="https://github.com/Arjunprasaath/Recursive-Self-Improving-World" target="_blank">RSIW</a><div class="repo-path">Arjunprasaath/Recursive-Self-Improving-World</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Arjunprasaath/Recursive-Self-Improving-World" target="_blank">RSIW</a><div class="repo-path">Arjunprasaath/Recursive-Self-Improving-World</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">RL curriculum where Vertex AI Gemini designs environments, writes MuJoCo reward functions, and extracts lessons — real PPO agents train in Stable-Baselines3.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s4">4</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Technically deep. World design + reward synthesis loop. Vertex AI, not DO.</td>
     </tr>
-    <tr class="" data-num="24" data-name="brickbybrick" data-tldr="autonomous pipeline finding a small model's ui-coding blind spots, curating them" data-notes="strongest multi-service do integration. loss metric improving (6.17→5.68) in demo. 2-person team." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="24" data-name="brickbybrick" data-tldr="autonomous pipeline finding a small model's ui-coding blind spots, curating them" data-notes="strongest multi-service do integration. loss metric improving (6.17→5.68) in demo. 2-person team." data-judge="santhosh" data-total="19" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">24</td>
-      <td class="project-cell"><a href="https://github.com/PeytonLi/BrickByBrick" target="_blank">BrickByBrick</a><div class="repo-path">PeytonLi/BrickByBrick</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/PeytonLi/BrickByBrick" target="_blank">BrickByBrick</a><div class="repo-path">PeytonLi/BrickByBrick</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Autonomous pipeline finding a small model's UI-coding blind spots, curating them as training data, and LoRA fine-tuning on DO H100 GPUs. Deployed live on DO App Platform.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title=".env.example: DIGITALOCEAN_MODEL_ACCESS_KEY=">Inference</span><span class="badge badge-appplatform" title="README.md: | :00 | **[Training page](https://brickbybrick-xxxxx.ondigitalocean.app/training)** — Los">App Platform</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">19</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:95%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s4">4</td>
-      <td><span class="sales-yes" title="Multi-service DO customer: App Platform (live deployment), H100 GPU Droplets (training), Inference (fallback). Highest priority DO prospect.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Multi-service DO customer: App Platform (live deployment), H100 GPU Droplets (training), Inference (fallback). Highest priority DO prospect.">Flag</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-santhosh">S</span>Santhosh</span></td>
       <td class="notes-cell">Strongest multi-service DO integration. Loss metric improving (6.17→5.68) in demo. 2-person team.</td>
     </tr>
-    <tr class="" data-num="25" data-name="bron" data-tldr="self-improving supply chain optimizer using modular execution graphs that evolve" data-notes="do listed as one of several optional llm providers. 3-person team." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="25" data-name="bron" data-tldr="self-improving supply chain optimizer using modular execution graphs that evolve" data-notes="do listed as one of several optional llm providers. 3-person team." data-judge="santhosh" data-total="15" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">25</td>
-      <td class="project-cell"><a href="https://github.com/Cademiller23/bron" target="_blank">Bron</a><div class="repo-path">Cademiller23/bron</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Cademiller23/bron" target="_blank">Bron</a><div class="repo-path">Cademiller23/bron</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Self-improving supply chain optimizer using modular execution graphs that evolve via selective breeding of successful subgraphs.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: - **Frontend:** copy `frontend/.env.example` → `frontend/.env.local` (LiveKit + DigitalOc">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s5">5</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge" title="Stood out for DO."><span class="judge-avatar j-santhosh">S</span>Santhosh</span><span class="judge-note">Stood out for DO.</span></td>
       <td class="notes-cell">DO listed as one of several optional LLM providers. 3-person team.</td>
     </tr>
-    <tr class="" data-num="26" data-name="darwin sre" data-tldr="self-improving sre system using do inference as its primary llm — detects incide" data-notes="config.py hardcodes do endpoint. clean integration. solo." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="26" data-name="darwin sre" data-tldr="self-improving sre system using do inference as its primary llm — detects incide" data-notes="config.py hardcodes do endpoint. clean integration. solo." data-judge="santhosh" data-total="14" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">26</td>
-      <td class="project-cell"><a href="https://github.com/sachanta/darwin-sre" target="_blank">Darwin SRE</a><div class="repo-path">sachanta/darwin-sre</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/sachanta/darwin-sre" target="_blank">Darwin SRE</a><div class="repo-path">sachanta/darwin-sre</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Self-improving SRE system using DO Inference as its primary LLM — detects incidents, proposes resolutions, and learns from outcomes.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title=".env.example: DIGITAL_OCEAN_MODEL_ACCESS_KEY=doo_v1_...">Inference</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s4">4</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="DO Inference hardcoded as primary in config.py. SRE = recurring inference usage for real operational workload.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="DO Inference hardcoded as primary in config.py. SRE = recurring inference usage for real operational workload.">Flag</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-santhosh">S</span>Santhosh</span></td>
       <td class="notes-cell">config.py hardcodes DO endpoint. Clean integration. Solo.</td>
     </tr>
-    <tr class="" data-num="27" data-name="sqlwriters" data-tldr="drift detection and automated self-improvement for ai agents: detects accuracy d" data-notes="4-person team. 16 files. solid drift-detection concept. no do usage." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="27" data-name="sqlwriters" data-tldr="drift detection and automated self-improvement for ai agents: detects accuracy d" data-notes="4-person team. 16 files. solid drift-detection concept. no do usage." data-judge="" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">27</td>
-      <td class="project-cell"><a href="https://github.com/loganrudd/agent-self-improvement" target="_blank">SQLWriters</a><div class="repo-path">loganrudd/agent-self-improvement</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/loganrudd/agent-self-improvement" target="_blank">SQLWriters</a><div class="repo-path">loganrudd/agent-self-improvement</div></td>
       <td class="members-cell">4</td>
       <td class="tldr-cell">Drift detection and automated self-improvement for AI agents: detects accuracy degradation and makes agents recover from their own failures autonomously.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">4-person team. 16 files. Solid drift-detection concept. No DO usage.</td>
     </tr>
-    <tr class="" data-num="28" data-name="ignore all previous instructions" data-tldr="continual learning system over prediction markets using gemma e4b with on-policy" data-notes="committed in final 10 minutes. 3-person team." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="28" data-name="ignore all previous instructions" data-tldr="continual learning system over prediction markets using gemma e4b with on-policy" data-notes="committed in final 10 minutes. 3-person team." data-judge="" data-total="12" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">28</td>
-      <td class="project-cell"><a href="https://github.com/bxptr/superprediction" target="_blank">Ignore All Previous Instructions</a><div class="repo-path">bxptr/superprediction</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/bxptr/superprediction" target="_blank">Ignore All Previous Instructions</a><div class="repo-path">bxptr/superprediction</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Continual learning system over prediction markets using Gemma E4B with on-policy self-distillation and Exa search — learns from being wrong every hour.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">12</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:60%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Committed in final 10 minutes. 3-person team.</td>
     </tr>
-    <tr class="" data-num="29" data-name="solux" data-tldr="ai geospatial screening platform for solar site selection producing go/investiga" data-notes="exceptional real-world problem — saves millions by killing bad sites early. solo developer." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="29" data-name="solux" data-tldr="ai geospatial screening platform for solar site selection producing go/investiga" data-notes="exceptional real-world problem — saves millions by killing bad sites early. solo developer." data-judge="santhosh" data-total="18" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">29</td>
-      <td class="project-cell"><a href="https://github.com/chetas1208/Solux" target="_blank">Solux</a><div class="repo-path">chetas1208/Solux</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/chetas1208/Solux" target="_blank">Solux</a><div class="repo-path">chetas1208/Solux</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">AI geospatial screening platform for solar site selection producing GO/INVESTIGATE/KILL decisions from real NREL/PVGIS data. Deployed on DO App Platform; report artifacts stored in Spaces.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-spaces" title="README.md: | Infra | DigitalOcean App Platform + Spaces |">Spaces</span><span class="badge badge-appplatform" title="README.md: | Infra | DigitalOcean App Platform + Spaces |">App Platform</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">18</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:90%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="DO App Platform + Spaces for production solar screening app. Real commercial use case with ongoing data storage. High priority.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="DO App Platform + Spaces for production solar screening app. Real commercial use case with ongoing data storage. High priority.">Flag</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-santhosh">S</span>Santhosh</span></td>
       <td class="notes-cell">Exceptional real-world problem — saves millions by killing bad sites early. Solo developer.</td>
     </tr>
-    <tr class="" data-num="30" data-name="agentshield" data-tldr="self-improving guardrails: attack agent discovers vulnerabilities in customer-fa" data-notes="important problem space. solo developer." data-sales="true" data-flagged="false" data-verified="false">
+    <tr class="" data-num="30" data-name="agentshield" data-tldr="self-improving guardrails: attack agent discovers vulnerabilities in customer-fa" data-notes="important problem space. solo developer." data-judge="amit" data-total="14" data-sales="true" data-flagged="false" data-verified="false">
       <td class="num-cell">30</td>
-      <td class="project-cell"><a href="https://github.com/vonHousen/agent-shield-arena" target="_blank">AgentShield</a><div class="repo-path">vonHousen/agent-shield-arena</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/vonHousen/agent-shield-arena" target="_blank">AgentShield</a><div class="repo-path">vonHousen/agent-shield-arena</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Self-improving guardrails: Attack Agent discovers vulnerabilities in customer-facing AI, Defender learns patterns each round — producing stronger defenses without human input.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-yes" title="Self-improving adversarial guardrails for production agents is a real enterprise security product. Worth tracking.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Self-improving adversarial guardrails for production agents is a real enterprise security product. Worth tracking.">Flag</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-amit">A</span>Amit</span></td>
       <td class="notes-cell">Important problem space. Solo developer.</td>
     </tr>
-    <tr class="" data-num="31" data-name="gpu sitter" data-tldr="on-call agent for gpu datacenter clusters: responds to nvidia sensor failures an" data-notes="4-person team. 17 files. live on do sfo3 droplet. real gpu datacenter sre gap." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="31" data-name="gpu sitter" data-tldr="on-call agent for gpu datacenter clusters: responds to nvidia sensor failures an" data-notes="4-person team. 17 files. live on do sfo3 droplet. real gpu datacenter sre gap." data-judge="" data-total="14" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">31</td>
-      <td class="project-cell"><a href="https://github.com/jcmiller/hackathon-datacenter-agent" target="_blank">GPU Sitter</a><div class="repo-path">jcmiller/hackathon-datacenter-agent</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/jcmiller/hackathon-datacenter-agent" target="_blank">GPU Sitter</a><div class="repo-path">jcmiller/hackathon-datacenter-agent</div></td>
       <td class="members-cell">4</td>
       <td class="tldr-cell">On-call agent for GPU datacenter clusters: responds to NVIDIA sensor failures and updates its own small ML prediction model from each incident. Running live on a DO Droplet in SFO3.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: **[http://134.199.208.214:8000](http://134.199.208.214:8000)** — publicly accessible, run">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Live deployment on DO Droplet (SFO3, public IP). 4-person team. GPU datacenter SRE = infrastructure-heavy customer.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Live deployment on DO Droplet (SFO3, public IP). 4-person team. GPU datacenter SRE = infrastructure-heavy customer.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">4-person team. 17 files. Live on DO SFO3 Droplet. Real GPU datacenter SRE gap.</td>
     </tr>
-    <tr class="" data-num="32" data-name="podman: pair programmer" data-tldr="ambient pair programmer watching a shared livekit room, learning which intervent" data-notes="podman.live is live. full stack on do droplet: app, api, workers, caddy." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="32" data-name="podman: pair programmer" data-tldr="ambient pair programmer watching a shared livekit room, learning which intervent" data-notes="podman.live is live. full stack on do droplet: app, api, workers, caddy." data-judge="amit" data-total="14" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">32</td>
-      <td class="project-cell"><a href="https://github.com/karti-ai/podman" target="_blank">PodMan: Pair Programmer</a><div class="repo-path">karti-ai/podman</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/karti-ai/podman" target="_blank">PodMan: Pair Programmer</a><div class="repo-path">karti-ai/podman</div></td>
       <td class="members-cell">4</td>
       <td class="tldr-cell">Ambient pair programmer watching a shared LiveKit room, learning which interventions help, and nudging teams before merge conflicts or missed handoffs — hosted on DO Droplet.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: [DigitalOcean](https://www.digitalocean.com/)">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Live production app (podman.live) on DO Droplet. 4-person team. Real app = recurring cloud spend.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Live production app (podman.live) on DO Droplet. 4-person team. Real app = recurring cloud spend.">Flag</span></td>
+      <td class="judge-col"><span class="judge" title="Used DO Inference."><span class="judge-avatar j-amit">A</span>Amit</span><span class="judge-note">Used DO Inference.</span></td>
       <td class="notes-cell">podman.live is live. Full stack on DO Droplet: app, API, workers, Caddy.</td>
     </tr>
-    <tr class="" data-num="33" data-name="omniforge" data-tldr="self-healing proxy that supervises running ai apps, auto-catches errors, has gem" data-notes="animated arch demo at omniforge-anim.vercel.app. 2-person team. impressive concept." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="33" data-name="omniforge" data-tldr="self-healing proxy that supervises running ai apps, auto-catches errors, has gem" data-notes="animated arch demo at omniforge-anim.vercel.app. 2-person team. impressive concept." data-judge="" data-total="17" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">33</td>
-      <td class="project-cell"><a href="https://github.com/Shradhapujari/ai-engineer-worlds-fair-2026-hackathon" target="_blank">OmniForge</a><div class="repo-path">Shradhapujari/ai-engineer-worlds-fair-2026-hackathon</div><div class="demo-link"><a href="https://drive.google.com/drive/folders/1zGI93uuE-iJtAZjlOzUPzhX6las-eRxl?usp=sharing" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Shradhapujari/ai-engineer-worlds-fair-2026-hackathon" target="_blank">OmniForge</a><div class="repo-path">Shradhapujari/ai-engineer-worlds-fair-2026-hackathon</div><a class="demo-link" href="https://drive.google.com/drive/folders/1zGI93uuE-iJtAZjlOzUPzhX6las-eRxl?usp=sharing" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Self-healing proxy that supervises running AI apps, auto-catches errors, has Gemini write a patch, runs through security scanner, and hot-swaps the fix if it passes.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-droplet" title="README.md: Gemini 3.5 Flash · DigitalOcean droplet · SQLite · Docker · semgrep + bandit · Python 3.1">Droplets</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">17</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:85%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Self-healing proxy for production AI is a real enterprise need. DO Droplet for hosting — potential App Platform conversion.">Yes</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Self-healing proxy for production AI is a real enterprise need. DO Droplet for hosting — potential App Platform conversion.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Animated arch demo at omniforge-anim.vercel.app. 2-person team. Impressive concept.</td>
     </tr>
-    <tr class="" data-num="34" data-name="omegapacman: interpretable multi-agent learning" data-tldr="multi-agent pac-man where ghost agents learn cooperative teamwork by rewriting t" data-notes="creative interpretability demo. first commit was just a readme (5-min window on june 27)." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="34" data-name="omegapacman: interpretable multi-agent learning" data-tldr="multi-agent pac-man where ghost agents learn cooperative teamwork by rewriting t" data-notes="creative interpretability demo. first commit was just a readme (5-min window on june 27)." data-judge="amit" data-total="12" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">34</td>
-      <td class="project-cell"><a href="https://github.com/eldengu/omegapacman" target="_blank">OmegaPacman: Interpretable Multi-Agent Learning</a><div class="repo-path">eldengu/omegapacman</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/eldengu/omegapacman" target="_blank">OmegaPacman: Interpretable Multi-Agent Learning</a><div class="repo-path">eldengu/omegapacman</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Multi-agent Pac-Man where ghost agents learn cooperative teamwork by rewriting their strategies in plain English via Reflexion — teamwork emerges without anyone coding it.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">12</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:60%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s5">5</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-amit">A</span>Amit</span></td>
       <td class="notes-cell">Creative interpretability demo. First commit was just a README (5-min window on June 27).</td>
     </tr>
-    <tr class="" data-num="35" data-name="autodrone" data-tldr="llm-driven drone agent in airsim simulator: natural language mission → flight ta" data-notes="gemma + modal + mongodb. c++ codebase. ambitious." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="35" data-name="autodrone" data-tldr="llm-driven drone agent in airsim simulator: natural language mission → flight ta" data-notes="gemma + modal + mongodb. c++ codebase. ambitious." data-judge="amit" data-total="14" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">35</td>
-      <td class="project-cell"><a href="https://github.com/Carldtitan/Autodrone" target="_blank">Autodrone</a><div class="repo-path">Carldtitan/Autodrone</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Carldtitan/Autodrone" target="_blank">Autodrone</a><div class="repo-path">Carldtitan/Autodrone</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">LLM-driven drone agent in AirSim simulator: natural language mission → flight task → Unreal execution, with live 3D Cesium San Francisco dashboard.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-amit">A</span>Amit</span></td>
       <td class="notes-cell">Gemma + Modal + MongoDB. C++ codebase. Ambitious.</td>
     </tr>
-    <tr class="" data-num="36" data-name="veche" data-tldr="vision agent swarm that maps legacy gui software (citrix ehrs, mainframes) into " data-notes="excellent real-world problem. citrix/mainframe computer use is genuinely underserved. solo." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="36" data-name="veche" data-tldr="vision agent swarm that maps legacy gui software (citrix ehrs, mainframes) into " data-notes="excellent real-world problem. citrix/mainframe computer use is genuinely underserved. solo." data-judge="" data-total="17" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">36</td>
-      <td class="project-cell"><a href="https://github.com/Oxyz-Studio/veche" target="_blank">Veche</a><div class="repo-path">Oxyz-Studio/veche</div><div class="demo-link"><a href="https://gyazo.com/eff6439d6627c96c35a90286254c67d0" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Oxyz-Studio/veche" target="_blank">Veche</a><div class="repo-path">Oxyz-Studio/veche</div><a class="demo-link" href="https://gyazo.com/eff6439d6627c96c35a90286254c67d0" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Vision agent swarm that maps legacy GUI software (Citrix EHRs, mainframes) into a shared world-model by consensus, then operates the app cheaply from the map.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title=".env.example: #   Claim $200: DO table or https://do-hacker-guide-uijyg.ondigitalocean.app">App Platform</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">17</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:85%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Computer use for legacy healthcare software is a massive enterprise market. DO token configured. Product team should follow up.">Yes</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Computer use for legacy healthcare software is a massive enterprise market. DO token configured. Product team should follow up.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Excellent real-world problem. Citrix/mainframe computer use is genuinely underserved. Solo.</td>
     </tr>
-    <tr class="" data-num="37" data-name="gravitymedshield" data-tldr="human-in-the-loop dicom de-identification pipeline that recursively improves phi" data-notes="gemini for medical imaging. dicom format. niche but real market." data-sales="true" data-flagged="false" data-verified="false">
+    <tr class="" data-num="37" data-name="gravitymedshield" data-tldr="human-in-the-loop dicom de-identification pipeline that recursively improves phi" data-notes="gemini for medical imaging. dicom format. niche but real market." data-judge="" data-total="14" data-sales="true" data-flagged="false" data-verified="false">
       <td class="num-cell">37</td>
-      <td class="project-cell"><a href="https://github.com/wojtczyk/GravityMedShield" target="_blank">GravityMedShield</a><div class="repo-path">wojtczyk/GravityMedShield</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/wojtczyk/GravityMedShield" target="_blank">GravityMedShield</a><div class="repo-path">wojtczyk/GravityMedShield</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Human-in-the-loop DICOM de-identification pipeline that recursively improves PHI detection accuracy, with a review UI for medical data anonymization.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-yes" title="HIPAA-compliant medical PHI de-identification is a real compliance need. Product team should follow up for healthcare vertical.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="HIPAA-compliant medical PHI de-identification is a real compliance need. Product team should follow up for healthcare vertical.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Gemini for medical imaging. DICOM format. Niche but real market.</td>
     </tr>
-    <tr class="" data-num="38" data-name="aperacium" data-tldr="autonomous litigation engine running four gemini computer use agents in parallel" data-notes="adversarial alpha/beta drafting loop. react real-time dashboard. solo." data-sales="true" data-flagged="false" data-verified="false">
+    <tr class="" data-num="38" data-name="aperacium" data-tldr="autonomous litigation engine running four gemini computer use agents in parallel" data-notes="adversarial alpha/beta drafting loop. react real-time dashboard. solo." data-judge="amit" data-total="15" data-sales="true" data-flagged="false" data-verified="false">
       <td class="num-cell">38</td>
-      <td class="project-cell"><a href="https://github.com/rdinesh207/ai-paralegal" target="_blank">Aperacium</a><div class="repo-path">rdinesh207/ai-paralegal</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/rdinesh207/ai-paralegal" target="_blank">Aperacium</a><div class="repo-path">rdinesh207/ai-paralegal</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Autonomous litigation engine running four Gemini Computer Use agents in parallel to draft a court-ready Motion for Summary Judgment in under 4 minutes.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-yes" title="AI paralegal automating legal motions = high-value legal tech market. Real demo (4-min MSJ). Sales outreach worthwhile.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="AI paralegal automating legal motions = high-value legal tech market. Real demo (4-min MSJ). Sales outreach worthwhile.">Flag</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-amit">A</span>Amit</span></td>
       <td class="notes-cell">Adversarial Alpha/Beta drafting loop. React real-time dashboard. Solo.</td>
     </tr>
-    <tr class="" data-num="39" data-name="recursive shield" data-tldr="guardrail system for browser-use trading agents that blocks audio prompt-injecti" data-notes="4-person team. novel attack vector (audio prompt injection for trading). strong security angle." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="39" data-name="recursive shield" data-tldr="guardrail system for browser-use trading agents that blocks audio prompt-injecti" data-notes="4-person team. novel attack vector (audio prompt injection for trading). strong security angle." data-judge="amit" data-total="15" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">39</td>
-      <td class="project-cell"><a href="https://github.com/vineeth917/Recursive-shield" target="_blank">Recursive Shield</a><div class="repo-path">vineeth917/Recursive-shield</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/vineeth917/Recursive-shield" target="_blank">Recursive Shield</a><div class="repo-path">vineeth917/Recursive-shield</div></td>
       <td class="members-cell">4</td>
       <td class="tldr-cell">Guardrail system for browser-use trading agents that blocks audio prompt-injection attacks at the tool boundary before state changes occur.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-amit">A</span>Amit</span></td>
       <td class="notes-cell">4-person team. Novel attack vector (audio prompt injection for trading). Strong security angle.</td>
     </tr>
-    <tr class="" data-num="40" data-name="dream harness" data-tldr="macos desktop app for ai coding harnesses that runs a 'sleep cycle' scoring coll" data-notes="2-person team. interesting meta-health layer for ai harnesses." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="40" data-name="dream harness" data-tldr="macos desktop app for ai coding harnesses that runs a 'sleep cycle' scoring coll" data-notes="2-person team. interesting meta-health layer for ai harnesses." data-judge="amit" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">40</td>
-      <td class="project-cell"><a href="https://github.com/reachjalil/harness-dreams" target="_blank">Dream Harness</a><div class="repo-path">reachjalil/harness-dreams</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/reachjalil/harness-dreams" target="_blank">Dream Harness</a><div class="repo-path">reachjalil/harness-dreams</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">macOS desktop app for AI coding harnesses that runs a 'Sleep Cycle' scoring collaboration quality and turning daily friction into reviewable improvements.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-amit">A</span>Amit</span></td>
       <td class="notes-cell">2-person team. Interesting meta-health layer for AI harnesses.</td>
     </tr>
-    <tr class="" data-num="41" data-name="a.s.f" data-tldr="autonomous sre agents using bounded tree-search code synthesis on a live doks cl" data-notes="deepmind-derived rex tree search. no fine-tuning. doks for live cluster tests." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="41" data-name="a.s.f" data-tldr="autonomous sre agents using bounded tree-search code synthesis on a live doks cl" data-notes="deepmind-derived rex tree search. no fine-tuning. doks for live cluster tests." data-judge="" data-total="15" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">41</td>
-      <td class="project-cell"><a href="https://github.com/srushtismadhure/RSI_agents" target="_blank">A.S.F</a><div class="repo-path">srushtismadhure/RSI_agents</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/srushtismadhure/RSI_agents" target="_blank">A.S.F</a><div class="repo-path">srushtismadhure/RSI_agents</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Autonomous SRE agents using bounded tree-search code synthesis on a live DOKS cluster — LLM proposes actions, synthesized verifier prunes unsafe branches.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-droplet" title="README.md: or by Kubernetes self-healing / the fault elapsing?** Run on a real DigitalOcean Kubernet">Kubernetes</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s5">5</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Using DOKS for SRE agent testing. K8s-native automation = enterprise infrastructure customer. 3-person team.">Yes</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Using DOKS for SRE agent testing. K8s-native automation = enterprise infrastructure customer. 3-person team.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">DeepMind-derived REx tree search. No fine-tuning. DOKS for live cluster tests.</td>
     </tr>
-    <tr class="" data-num="42" data-name="temper" data-tldr="environment-level evaluator that tests the harness around a model (system prompt" data-notes="3-person team. 'model cards test the model — temper tests everything around it.' gemini track." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="42" data-name="temper" data-tldr="environment-level evaluator that tests the harness around a model (system prompt" data-notes="3-person team. 'model cards test the model — temper tests everything around it.' gemini track." data-judge="meghan" data-total="12" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">42</td>
-      <td class="project-cell"><a href="https://github.com/aadityad12/Temper" target="_blank">Temper</a><div class="repo-path">aadityad12/Temper</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/aadityad12/Temper" target="_blank">Temper</a><div class="repo-path">aadityad12/Temper</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Environment-level evaluator that tests the harness around a model (system prompt, skill files, tools) rather than the model itself, auto-remediating what it finds.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">12</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:60%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge" title="Used DO App Platform."><span class="judge-avatar j-meghan">M</span>Meghan</span><span class="judge-note">Used DO App Platform.</span></td>
       <td class="notes-cell">3-person team. 'Model cards test the model — TEMPER tests everything around it.' Gemini track.</td>
     </tr>
-    <tr class="" data-num="43" data-name="rune" data-tldr="stack overflow for the agentic era: passively monitors coding sessions, captures" data-notes="2-person team. public debugging memory across swift macos + fastapi. do models mentioned in docs." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="43" data-name="rune" data-tldr="stack overflow for the agentic era: passively monitors coding sessions, captures" data-notes="2-person team. public debugging memory across swift macos + fastapi. do models mentioned in docs." data-judge="" data-total="15" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">43</td>
-      <td class="project-cell"><a href="https://github.com/vinaykudari/rune" target="_blank">Rune</a><div class="repo-path">vinaykudari/rune</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/vinaykudari/rune" target="_blank">Rune</a><div class="repo-path">vinaykudari/rune</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Stack Overflow for the agentic era: passively monitors coding sessions, captures error/fix traces, and distills them into a public reusable debugging memory layer.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: For local OpenCode setup with DigitalOcean AI models, see [docs/opencode-digitalocean.md]">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">2-person team. Public debugging memory across Swift macOS + FastAPI. DO models mentioned in docs.</td>
     </tr>
-    <tr class="" data-num="44" data-name="tutorai" data-tldr="synthetic ai student swarm deployed on do app platform that tests tutoring effec" data-notes="app is live and responding. multiple real endpoints documented in readme." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="44" data-name="tutorai" data-tldr="synthetic ai student swarm deployed on do app platform that tests tutoring effec" data-notes="app is live and responding. multiple real endpoints documented in readme." data-judge="" data-total="14" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">44</td>
-      <td class="project-cell"><a href="https://github.com/henryqi-goldenbear/world-fair-hackathon" target="_blank">tutorAI</a><div class="repo-path">henryqi-goldenbear/world-fair-hackathon</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/henryqi-goldenbear/world-fair-hackathon" target="_blank">tutorAI</a><div class="repo-path">henryqi-goldenbear/world-fair-hackathon</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Synthetic AI student swarm deployed on DO App Platform that tests tutoring effectiveness by simulating student sessions and scoring them with Gemini and MiniMax evaluators.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: https://ferbai-fastapi-ingestor-ej6yt.ondigitalocean.app">App Platform</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="Live production app at ferbai-fastapi-ingestor-ej6yt.ondigitalocean.app. Education AI on DO App Platform.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Live production app at ferbai-fastapi-ingestor-ej6yt.ondigitalocean.app. Education AI on DO App Platform.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">App is live and responding. Multiple real endpoints documented in README.</td>
     </tr>
-    <tr class="" data-num="45" data-name="yolo wallstreet model" data-tldr="stock prediction system combining chronos time-series models, news ingestion, an" data-notes="python. solo. financial prediction is a commodity space." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="45" data-name="yolo wallstreet model" data-tldr="stock prediction system combining chronos time-series models, news ingestion, an" data-notes="python. solo. financial prediction is a commodity space." data-judge="meghan" data-total="10" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">45</td>
-      <td class="project-cell"><a href="https://github.com/KaushikSiva/yolo-model" target="_blank">Yolo WallStreet Model</a><div class="repo-path">KaushikSiva/yolo-model</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/KaushikSiva/yolo-model" target="_blank">Yolo WallStreet Model</a><div class="repo-path">KaushikSiva/yolo-model</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Stock prediction system combining Chronos time-series models, news ingestion, and LLM reasoning for modular AI trading research with paper-trading focus.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-low">10</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-low" style="width:50%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-meghan">M</span>Meghan</span></td>
       <td class="notes-cell">Python. Solo. Financial prediction is a commodity space.</td>
     </tr>
-    <tr class="" data-num="46" data-name="darwins" data-tldr="ai that researches quant trading alphas using gemini, kills weak signals, breeds" data-notes="measurable improvement is compelling. do gradient inference badge explicit in readme. antigravity integration too." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="46" data-name="darwins" data-tldr="ai that researches quant trading alphas using gemini, kills weak signals, breeds" data-notes="measurable improvement is compelling. do gradient inference badge explicit in readme. antigravity integration too." data-judge="meghan" data-total="17" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">46</td>
-      <td class="project-cell"><a href="https://github.com/ShJavokhir/quant-alpha" target="_blank">Darwins</a><div class="repo-path">ShJavokhir/quant-alpha</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/ShJavokhir/quant-alpha" target="_blank">Darwins</a><div class="repo-path">ShJavokhir/quant-alpha</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">AI that researches quant trading alphas using Gemini, kills weak signals, breeds strong ones, and compounds memory — DO Gradient Inference serves the MiniMax M2.5 reasoning proposer.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title="README.md: | **DigitalOcean Gradient Inference** (`inference.do-ai.run`) | serves the swappable reas">Inference</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">17</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:85%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="DO Inference load-bearing for trading signal proposer. 3-person team with quantified results (+119% more profitable signals with memory).">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="DO Inference load-bearing for trading signal proposer. 3-person team with quantified results (+119% more profitable signals with memory).">Flag</span></td>
+      <td class="judge-col"><span class="judge" title="Stood out for DO."><span class="judge-avatar j-meghan">M</span>Meghan</span><span class="judge-note">Stood out for DO.</span></td>
       <td class="notes-cell">Measurable improvement is compelling. DO Gradient Inference badge explicit in README. Antigravity integration too.</td>
     </tr>
-    <tr class="" data-num="47" data-name="judy" data-tldr="self-improving llm-as-judge for pairwise qa that evaluates answers, then rewrite" data-notes="solo python. reflexion applied to the judge itself — interesting meta-eval concept." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="47" data-name="judy" data-tldr="self-improving llm-as-judge for pairwise qa that evaluates answers, then rewrite" data-notes="solo python. reflexion applied to the judge itself — interesting meta-eval concept." data-judge="" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">47</td>
-      <td class="project-cell"><a href="https://github.com/varshini2305/judy" target="_blank">Judy</a><div class="repo-path">varshini2305/judy</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/varshini2305/judy" target="_blank">Judy</a><div class="repo-path">varshini2305/judy</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Self-improving LLM-as-judge for pairwise QA that evaluates answers, then rewrites its own evaluation policy (SKILL.md) by reflecting on its mistakes.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Solo Python. Reflexion applied to the judge itself — interesting meta-eval concept.</td>
     </tr>
-    <tr class="" data-num="48" data-name="gemini cua skill loop" data-tldr="training-free skill acquisition for gemini 3.5 flash computer use: watches failu" data-notes="clean methodology for verified skill retention. youtube demo playlist." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="48" data-name="gemini cua skill loop" data-tldr="training-free skill acquisition for gemini 3.5 flash computer use: watches failu" data-notes="clean methodology for verified skill retention. youtube demo playlist." data-judge="" data-total="10" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">48</td>
-      <td class="project-cell"><a href="https://github.com/renantrendt/gemini-cu-skill-loop" target="_blank">Gemini CUA Skill Loop</a><div class="repo-path">renantrendt/gemini-cu-skill-loop</div><div class="demo-link"><a href="https://www.youtube.com/playlist?list=PLK9NUN1l0EQY" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/renantrendt/gemini-cu-skill-loop" target="_blank">Gemini CUA Skill Loop</a><div class="repo-path">renantrendt/gemini-cu-skill-loop</div><a class="demo-link" href="https://www.youtube.com/playlist?list=PLK9NUN1l0EQY" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Training-free skill acquisition for Gemini 3.5 Flash Computer Use: watches failures, distills a reusable skill, retries, and keeps it only if a verified retry proves it works.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-low">10</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-low" style="width:50%"></div></div></div></td>
       <td class="score s3">3</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Clean methodology for verified skill retention. YouTube demo playlist.</td>
     </tr>
-    <tr class="" data-num="49" data-name="seaforge" data-tldr="gemini-powered self-learning loop for autonomous surface vessel manufacturers: t" data-notes="rust codebase. interesting military/maritime angle. readme just says 'wsg' — hard to evaluate." data-sales="true" data-flagged="false" data-verified="false">
+    <tr class="" data-num="49" data-name="seaforge" data-tldr="gemini-powered self-learning loop for autonomous surface vessel manufacturers: t" data-notes="rust codebase. interesting military/maritime angle. readme just says 'wsg' — hard to evaluate." data-judge="" data-total="15" data-sales="true" data-flagged="false" data-verified="false">
       <td class="num-cell">49</td>
-      <td class="project-cell"><a href="https://github.com/deltoidal-icositetrahedron/SeaForge" target="_blank">SeaForge</a><div class="repo-path">deltoidal-icositetrahedron/SeaForge</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/deltoidal-icositetrahedron/SeaForge" target="_blank">SeaForge</a><div class="repo-path">deltoidal-icositetrahedron/SeaForge</div></td>
       <td class="members-cell">4</td>
       <td class="tldr-cell">Gemini-powered self-learning loop for Autonomous Surface Vessel manufacturers: tests ships against real Navy mission briefs with persistent memory of component failures.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-yes" title="ASV simulation + Navy mission testing = defense/maritime market. Niche but high-value. 4-person team.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="ASV simulation + Navy mission testing = defense/maritime market. Niche but high-value. 4-person team.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Rust codebase. Interesting military/maritime angle. README just says 'wsg' — hard to evaluate.</td>
     </tr>
-    <tr class="" data-num="50" data-name="focal point" data-tldr="chat interface that adapts in real time based on webcam iris tracking — a reward" data-notes="2-person team. 15 files. creative eye-tracking adaptive ux. do/openai fallback code was removed — no live do usage." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="50" data-name="focal point" data-tldr="chat interface that adapts in real time based on webcam iris tracking — a reward" data-notes="2-person team. 15 files. creative eye-tracking adaptive ux. do/openai fallback code was removed — no live do usage." data-judge="meghan" data-total="15" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">50</td>
-      <td class="project-cell"><a href="https://github.com/ypatodkar/FocalPoint" target="_blank">Focal point</a><div class="repo-path">ypatodkar/FocalPoint</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/ypatodkar/FocalPoint" target="_blank">Focal point</a><div class="repo-path">ypatodkar/FocalPoint</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Chat interface that adapts in real time based on webcam iris tracking — a Reward Agent scores gaze zones and a Prompt Agent rebuilds the system prompt from your reading profile.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: - DigitalOcean/OpenAI fallback code was removed.">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s4">4</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-meghan">M</span>Meghan</span></td>
       <td class="notes-cell">2-person team. 15 files. Creative eye-tracking adaptive UX. DO/OpenAI fallback code was removed — no live DO usage.</td>
     </tr>
-    <tr class="" data-num="51" data-name="agent university" data-tldr="rigorous infrastructure for agent self-improvement: mcp trajectory recorder, ski" data-notes="solo. experiment ledger + trajectory logging. do app platform for selfimprove.ai." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="51" data-name="agent university" data-tldr="rigorous infrastructure for agent self-improvement: mcp trajectory recorder, ski" data-notes="solo. experiment ledger + trajectory logging. do app platform for selfimprove.ai." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">51</td>
-      <td class="project-cell"><a href="https://github.com/dexhunter/agent-university" target="_blank">Agent University</a><div class="repo-path">dexhunter/agent-university</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/dexhunter/agent-university" target="_blank">Agent University</a><div class="repo-path">dexhunter/agent-university</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Rigorous infrastructure for agent self-improvement: MCP trajectory recorder, skill versioning, and sandboxed evaluation to prevent overfitting and reward-hacking. Deployed on DO App Platform.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: DigitalOcean App Platform builds `Dockerfile`, serves on port `8080`, and uses">App Platform</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s4">4</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Solo. Experiment ledger + trajectory logging. DO App Platform for selfimprove.ai.</td>
     </tr>
-    <tr class="" data-num="52" data-name="tutor loop" data-tldr="education marketplace where human tutoring sessions teach the ai tutor to improv" data-notes="solo. interesting: human tutoring improves ai tutor. .do/app.yaml deployment configured." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="52" data-name="tutor loop" data-tldr="education marketplace where human tutoring sessions teach the ai tutor to improv" data-notes="solo. interesting: human tutoring improves ai tutor. .do/app.yaml deployment configured." data-judge="" data-total="12" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">52</td>
-      <td class="project-cell"><a href="https://github.com/akhil-sachar/tutor-loop" target="_blank">Tutor Loop</a><div class="repo-path">akhil-sachar/tutor-loop</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/akhil-sachar/tutor-loop" target="_blank">Tutor Loop</a><div class="repo-path">akhil-sachar/tutor-loop</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Education marketplace where human tutoring sessions teach the AI tutor to improve — persistent memory accumulates better strategies across sessions without weight updates.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="DO App Platform deployment">App Platform</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">12</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:60%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Solo. Interesting: human tutoring improves AI tutor. .do/app.yaml deployment configured.</td>
     </tr>
-    <tr class="" data-num="53" data-name="racx" data-tldr="recursive autonomous customer experience system that solves underlying tickets r" data-notes="typescript monorepo. one team member owns do integration. livekit voice. real db code." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="53" data-name="racx" data-tldr="recursive autonomous customer experience system that solves underlying tickets r" data-notes="typescript monorepo. one team member owns do integration. livekit voice. real db code." data-judge="" data-total="14" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">53</td>
-      <td class="project-cell"><a href="https://github.com/Yoha02/CX_Lab" target="_blank">RACx</a><div class="repo-path">Yoha02/CX_Lab</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Yoha02/CX_Lab" target="_blank">RACx</a><div class="repo-path">Yoha02/CX_Lab</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Recursive Autonomous Customer Experience system that solves underlying tickets rather than just answering them — backed by DigitalOcean Managed Postgres for persistence.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-database" title="package.json: "api:init-db": "npm run init-db --workspace=infra/digitalocean",">Managed DB</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s4">4</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="DO Managed Postgres with actual integration code (db.ts, initDb.ts). 3-person team building CX platform. Recurring DB customer.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="DO Managed Postgres with actual integration code (db.ts, initDb.ts). 3-person team building CX platform. Recurring DB customer.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">TypeScript monorepo. One team member owns DO integration. LiveKit voice. Real DB code.</td>
     </tr>
-    <tr class="" data-num="54" data-name="rote" data-tldr="gemini 3.5 computer use agent that compiles successful runs into reusable keyboa" data-notes="4-person team. verified replay without model in loop is the key insight. mongodb for skill storage." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="54" data-name="rote" data-tldr="gemini 3.5 computer use agent that compiles successful runs into reusable keyboa" data-notes="4-person team. verified replay without model in loop is the key insight. mongodb for skill storage." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">54</td>
-      <td class="project-cell"><a href="https://github.com/gorajing/rote" target="_blank">rote</a><div class="repo-path">gorajing/rote</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/gorajing/rote" target="_blank">rote</a><div class="repo-path">gorajing/rote</div></td>
       <td class="members-cell">4</td>
       <td class="tldr-cell">Gemini 3.5 Computer Use agent that compiles successful runs into reusable keyboard-first skills, then replays them deterministically with zero model calls.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">4-person team. Verified replay without model in loop is the key insight. MongoDB for skill storage.</td>
     </tr>
-    <tr class="" data-num="55" data-name="shadermind" data-tldr="glsl shader artist agent where you steer with 1-5 ratings; it learns your visual" data-notes="2-person team. calldigitalocean() in production code. port 8080. beautiful continual preference learning." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="55" data-name="shadermind" data-tldr="glsl shader artist agent where you steer with 1-5 ratings; it learns your visual" data-notes="2-person team. calldigitalocean() in production code. port 8080. beautiful continual preference learning." data-judge="" data-total="16" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">55</td>
-      <td class="project-cell"><a href="https://github.com/jin-dalrae/shadermind" target="_blank">Shadermind</a><div class="repo-path">jin-dalrae/shadermind</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/jin-dalrae/shadermind" target="_blank">Shadermind</a><div class="repo-path">jin-dalrae/shadermind</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">GLSL shader artist agent where you steer with 1-5 ratings; it learns your visual taste over time via PLUS preference memory. DO Inference is the primary AI provider.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title=".env.example: DIGITAL_OCEAN_MODEL_ACCESS_KEY=">Inference</span><span class="badge badge-appplatform" title="README.md: | Deploy | DigitalOcean App Platform or Docker (`8080`) |">App Platform</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">16</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:80%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s4">4</td><td class="score s3">3</td>
-      <td><span class="sales-yes" title="DO Inference is primary provider in lib/ai.js with callDigitalOcean() function. Production-ready creative tool. Ongoing inference customer.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="DO Inference is primary provider in lib/ai.js with callDigitalOcean() function. Production-ready creative tool. Ongoing inference customer.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">2-person team. callDigitalOcean() in production code. Port 8080. Beautiful continual preference learning.</td>
     </tr>
-    <tr class="" data-num="56" data-name="gatekeeper" data-tldr="trust layer for production web agents: gemini 3.5 predicts screens, gemma lora a" data-notes="technically very ambitious. 24 tests passing. first commit june 28 19:15 — final 15 minutes of hackathon." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="56" data-name="gatekeeper" data-tldr="trust layer for production web agents: gemini 3.5 predicts screens, gemma lora a" data-notes="technically very ambitious. 24 tests passing. first commit june 28 19:15 — final 15 minutes of hackathon." data-judge="" data-total="16" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">56</td>
-      <td class="project-cell"><a href="https://github.com/vnmoorthy/Gatekeeper" target="_blank">Gatekeeper</a><div class="repo-path">vnmoorthy/Gatekeeper</div><div class="demo-link"><a href="https://drive.google.com/drive/folders/1wxOSSNLgbyRn9hImRr1gMyDGey4U84iw?usp=sharing" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/vnmoorthy/Gatekeeper" target="_blank">Gatekeeper</a><div class="repo-path">vnmoorthy/Gatekeeper</div><a class="demo-link" href="https://drive.google.com/drive/folders/1wxOSSNLgbyRn9hImRr1gMyDGey4U84iw?usp=sharing" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Trust layer for production web agents: Gemini 3.5 predicts screens, Gemma LoRA acts, a never-worse gate blocks regressions, and every action ships a tamper-evident signed receipt.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">16</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:80%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Technically very ambitious. 24 tests passing. First commit June 28 19:15 — final 15 minutes of hackathon.</td>
     </tr>
-    <tr class="" data-num="57" data-name="intotheunknown" data-tldr="ai scientist that discovers the physics of an unknown 3d world through autonomou" data-notes="do inference configured as experimental option but modal vllm is primary. fascinating concept." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="57" data-name="intotheunknown" data-tldr="ai scientist that discovers the physics of an unknown 3d world through autonomou" data-notes="do inference configured as experimental option but modal vllm is primary. fascinating concept." data-judge="" data-total="16" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">57</td>
-      <td class="project-cell"><a href="https://github.com/jungdaesuh/IntoTheUnkown" target="_blank">IntoTheUnknown</a><div class="repo-path">jungdaesuh/IntoTheUnkown</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/jungdaesuh/IntoTheUnkown" target="_blank">IntoTheUnknown</a><div class="repo-path">jungdaesuh/IntoTheUnkown</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">AI scientist that discovers the physics of an unknown 3D world through autonomous experiments, fitting models to evidence without any prior equations.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-inference" title=".env.example: # DIGITAL_OCEAN_MODEL_ACCESS_KEY=...">Inference</span></td>
-      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs.">Strong</span></td>
+      <td><span class="leg leg-strong" title="DO APIs or SDK called in actual source code or configs."><span class="dot dot-green"></span>Strong</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">16</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:80%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">DO Inference configured as experimental option but Modal vLLM is primary. Fascinating concept.</td>
     </tr>
-    <tr class="" data-num="58" data-name="cadenza" data-tldr="music composition feedback tool that accumulates a per-composer profile across s" data-notes="solo. anthropic api called from browser. clean ui concept for creative feedback." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="58" data-name="cadenza" data-tldr="music composition feedback tool that accumulates a per-composer profile across s" data-notes="solo. anthropic api called from browser. clean ui concept for creative feedback." data-judge="" data-total="12" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">58</td>
-      <td class="project-cell"><a href="https://github.com/jk118/cadenza" target="_blank">Cadenza</a><div class="repo-path">jk118/cadenza</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/jk118/cadenza" target="_blank">Cadenza</a><div class="repo-path">jk118/cadenza</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Music composition feedback tool that accumulates a per-composer profile across six dimensions (Harmony, Melody, Rhythm, Form, Orchestration) over sessions.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">12</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:60%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Solo. Anthropic API called from browser. Clean UI concept for creative feedback.</td>
     </tr>
-    <tr class="" data-num="59" data-name="marine gravity" data-tldr="agentic coding manager that continuously improves to deliver high-quality prs wi" data-notes="2-person team. pr automation is a well-trodden space." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="59" data-name="marine gravity" data-tldr="agentic coding manager that continuously improves to deliver high-quality prs wi" data-notes="2-person team. pr automation is a well-trodden space." data-judge="" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">59</td>
-      <td class="project-cell"><a href="https://github.com/arapat/marinegravity" target="_blank">Marine Gravity</a><div class="repo-path">arapat/marinegravity</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/arapat/marinegravity" target="_blank">Marine Gravity</a><div class="repo-path">arapat/marinegravity</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Agentic coding manager that continuously improves to deliver high-quality PRs with minimum human input, coordinating GitHub, Linear, and Slack.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">2-person team. PR automation is a well-trodden space.</td>
     </tr>
-    <tr class="" data-num="60" data-name="gambit" data-tldr="self-improving auto-negotiator that lists secondhand items, negotiates with buye" data-notes="strong multi-service do integration (app platform + pgvector memory). targeting best do prize. demo video live." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="60" data-name="gambit" data-tldr="self-improving auto-negotiator that lists secondhand items, negotiates with buye" data-notes="strong multi-service do integration (app platform + pgvector memory). targeting best do prize. demo video live." data-judge="" data-total="16" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">60</td>
-      <td class="project-cell"><a href="https://github.com/clocktower39/gambit" target="_blank">Gambit</a><div class="repo-path">clocktower39/gambit</div><div class="demo-link"><a href="https://gambit.nudepineapple.com/video" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/clocktower39/gambit" target="_blank">Gambit</a><div class="repo-path">clocktower39/gambit</div><a class="demo-link" href="https://gambit.nudepineapple.com/video" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Self-improving auto-negotiator that lists secondhand items, negotiates with buyers, and improves via continual self-play. Deployed on DO App Platform with Managed Postgres + pgvector for negotiation memory.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-database" title="README.md: **DigitalOcean** (App Platform + Managed Postgres/pgvector). The seller, buyer, optimizer">Managed DB</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">16</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:80%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td>
-      <td><span class="sales-yes" title="Multi-service DO: App Platform + Managed Postgres/pgvector. Explicitly targeting 'Best DigitalOcean' prize. 3-person team. High-priority prospect.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Multi-service DO: App Platform + Managed Postgres/pgvector. Explicitly targeting 'Best DigitalOcean' prize. 3-person team. High-priority prospect.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Strong multi-service DO integration (App Platform + pgvector memory). Targeting Best DO prize. Demo video live.</td>
     </tr>
-    <tr class="" data-num="61" data-name="9320" data-tldr="mission control cockpit for autonomous ml experiment loops — trajectory-centric " data-notes="solo python. interesting trajectory-centric research interface." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="61" data-name="9320" data-tldr="mission control cockpit for autonomous ml experiment loops — trajectory-centric " data-notes="solo python. interesting trajectory-centric research interface." data-judge="" data-total="13" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">61</td>
-      <td class="project-cell"><a href="https://github.com/shivenmian/kun" target="_blank">9320</a><div class="repo-path">shivenmian/kun</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/shivenmian/kun" target="_blank">9320</a><div class="repo-path">shivenmian/kun</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Mission control cockpit for autonomous ML experiment loops — trajectory-centric interface with mode A (Kun drives) and mode B (researcher drives).</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Solo Python. Interesting trajectory-centric research interface.</td>
     </tr>
-    <tr class="" data-num="62" data-name="dynaagent" data-tldr="self-evolving multi-agent framework that synthesizes agents, builds adaptive wor" data-notes="2-person team. live demo video. specific droplet ip in readme." data-sales="true" data-flagged="false" data-verified="true">
+    <tr class="" data-num="62" data-name="dynaagent" data-tldr="self-evolving multi-agent framework that synthesizes agents, builds adaptive wor" data-notes="2-person team. live demo video. specific droplet ip in readme." data-judge="" data-total="14" data-sales="true" data-flagged="false" data-verified="true">
       <td class="num-cell">62</td>
-      <td class="project-cell"><a href="https://github.com/kaddynator/self-evolving-harness" target="_blank">DynaAgent</a><div class="repo-path">kaddynator/self-evolving-harness</div><div class="demo-link"><a href="https://github.com/kaddynator/self-evolving-harness" target="_blank">Demo</a></div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/kaddynator/self-evolving-harness" target="_blank">DynaAgent</a><div class="repo-path">kaddynator/self-evolving-harness</div><a class="demo-link" href="https://github.com/kaddynator/self-evolving-harness" target="_blank">Demo &rarr;</a></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Self-evolving multi-agent framework that synthesizes agents, builds adaptive workflows, and refines through experience — Qdrant + ClickHouse run on a live DO Droplet.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-droplet" title="README.md: | **Infrastructure** | DigitalOcean Droplets + Docker (Qdrant + ClickHouse on `147.182.23">Droplets</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s2">2</td>
-      <td><span class="sales-yes" title="Real DO Droplet (IP 147.182.239.133) running Qdrant + ClickHouse. Active infrastructure customer. Could convert to managed DO databases.">Yes</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Real DO Droplet (IP 147.182.239.133) running Qdrant + ClickHouse. Active infrastructure customer. Could convert to managed DO databases.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">2-person team. Live demo video. Specific Droplet IP in README.</td>
     </tr>
-    <tr class="" data-num="63" data-name="launchlens" data-tldr="qa agent for ai agent launches: reads slack threads, uses gemini computer use to" data-notes="solo typescript. do explicitly listed as 'out of scope for now' in readme." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="63" data-name="launchlens" data-tldr="qa agent for ai agent launches: reads slack threads, uses gemini computer use to" data-notes="solo typescript. do explicitly listed as 'out of scope for now' in readme." data-judge="amit" data-total="13" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">63</td>
-      <td class="project-cell"><a href="https://github.com/rajashekarcs2023/launch-lens" target="_blank">LaunchLens</a><div class="repo-path">rajashekarcs2023/launch-lens</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/rajashekarcs2023/launch-lens" target="_blank">LaunchLens</a><div class="repo-path">rajashekarcs2023/launch-lens</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">QA agent for AI agent launches: reads Slack threads, uses Gemini Computer Use to test like a human QA tester, and generates a Slack-ready launch-readiness report.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-appplatform" title="README.md: | Live Slack, managed agents, DigitalOcean, LiveKit, Docker | ⏳ out of scope for now |">General DO</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-amit">A</span>Amit</span></td>
       <td class="notes-cell">Solo TypeScript. DO explicitly listed as 'out of scope for now' in README.</td>
     </tr>
-    <tr class="" data-num="64" data-name="yunaki" data-tldr="shared memory and self-evolving skills for agent teams — skills gain context wit" data-notes="solo python. skill body never changes, only context evolves. backed by skillsbench data. do just an example in docs." data-sales="false" data-flagged="false" data-verified="true">
+    <tr class="" data-num="64" data-name="yunaki" data-tldr="shared memory and self-evolving skills for agent teams — skills gain context wit" data-notes="solo python. skill body never changes, only context evolves. backed by skillsbench data. do just an example in docs." data-judge="santhosh" data-total="13" data-sales="false" data-flagged="false" data-verified="true">
       <td class="num-cell">64</td>
-      <td class="project-cell"><a href="https://github.com/Yugandhar-G/yunaki-skills" target="_blank">yunaki</a><div class="repo-path">Yugandhar-G/yunaki-skills</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/Yugandhar-G/yunaki-skills" target="_blank">yunaki</a><div class="repo-path">Yugandhar-G/yunaki-skills</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Shared memory and self-evolving skills for agent teams — skills gain context without the method changing, backed by a repo-wide super memory store.</td>
       <td class="tech-cell"></td>
       <td><span class="badge badge-droplet" title="docker-compose.yml: # Shared super-memory service — runs on any Docker host (e.g. a $6 DigitalOcean ">Droplets</span></td>
-      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found.">Partial</span></td>
+      <td><span class="leg leg-partial" title="DO mentioned in README/description/partner_technologies but no direct API call found."><span class="dot dot-amber"></span>Partial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">13</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:65%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s4">4</td><td class="score s3">3</td><td class="score s2">2</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="judge"><span class="judge-avatar j-santhosh">S</span>Santhosh</span></td>
       <td class="notes-cell">Solo Python. Skill body never changes, only context evolves. Backed by SkillsBench data. DO just an example in docs.</td>
     </tr>
-    <tr class="" data-num="65" data-name="revmem" data-tldr="governance, context, and reputation layer for autonomous enterprise finance agen" data-notes="fastapi + gemini/antigravity. reputation-gated autonomy is interesting trust model." data-sales="true" data-flagged="false" data-verified="false">
+    <tr class="" data-num="65" data-name="revmem" data-tldr="governance, context, and reputation layer for autonomous enterprise finance agen" data-notes="fastapi + gemini/antigravity. reputation-gated autonomy is interesting trust model." data-judge="" data-total="14" data-sales="true" data-flagged="false" data-verified="false">
       <td class="num-cell">65</td>
-      <td class="project-cell"><a href="https://github.com/njoshi22/aie" target="_blank">RevMem</a><div class="repo-path">njoshi22/aie</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/njoshi22/aie" target="_blank">RevMem</a><div class="repo-path">njoshi22/aie</div></td>
       <td class="members-cell">3</td>
       <td class="tldr-cell">Governance, context, and reputation layer for autonomous enterprise finance agents — earns broader autonomy as reputation improves across sessions.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-yes" title="Enterprise agent governance for finance = real compliance/risk product. 3-person team. Worth following up.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="Enterprise agent governance for finance = real compliance/risk product. 3-person team. Worth following up.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">FastAPI + Gemini/Antigravity. Reputation-gated autonomy is interesting trust model.</td>
     </tr>
-    <tr class="" data-num="66" data-name="liminal engine" data-tldr="governance layer for agentic work that catches agent drift, enforces corrections" data-notes="well-positioned in enterprise governance space." data-sales="true" data-flagged="false" data-verified="false">
+    <tr class="" data-num="66" data-name="liminal engine" data-tldr="governance layer for agentic work that catches agent drift, enforces corrections" data-notes="well-positioned in enterprise governance space." data-judge="" data-total="14" data-sales="true" data-flagged="false" data-verified="false">
       <td class="num-cell">66</td>
-      <td class="project-cell"><a href="https://github.com/liminalshruti/liminal-engine" target="_blank">Liminal Engine</a><div class="repo-path">liminalshruti/liminal-engine</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/liminalshruti/liminal-engine" target="_blank">Liminal Engine</a><div class="repo-path">liminalshruti/liminal-engine</div></td>
       <td class="members-cell">2</td>
       <td class="tldr-cell">Governance layer for agentic work that catches agent drift, enforces corrections as real operating state, and turns corrections into evals for the next pass.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">14</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:70%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s4">4</td><td class="score s1">1</td>
-      <td><span class="sales-yes" title="AI governance/drift detection for enterprise agents. Growing compliance need. TypeScript, 2-person team.">Yes</span></td>
-      <td><span class="date-ok">2026-06-27</span></td>
+      <td class="sales-col"><span class="pill pill-sales" title="AI governance/drift detection for enterprise agents. Growing compliance need. TypeScript, 2-person team.">Flag</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Well-positioned in enterprise governance space.</td>
     </tr>
-    <tr class="" data-num="67" data-name="muse the agent" data-tldr="end-to-end ai pipeline that transforms a character idea into a fully illustrated" data-notes="solo python. epub production pipeline. last-minute submission (first commit june 28 18:48)." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="67" data-name="muse the agent" data-tldr="end-to-end ai pipeline that transforms a character idea into a fully illustrated" data-notes="solo python. epub production pipeline. last-minute submission (first commit june 28 18:48)." data-judge="" data-total="11" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">67</td>
-      <td class="project-cell"><a href="https://github.com/WeekendSuperhero/story-book-generator" target="_blank">Muse the Agent</a><div class="repo-path">WeekendSuperhero/story-book-generator</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/WeekendSuperhero/story-book-generator" target="_blank">Muse the Agent</a><div class="repo-path">WeekendSuperhero/story-book-generator</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">End-to-end AI pipeline that transforms a character idea into a fully illustrated, publish-ready children's storybook using Google's agent pipeline and a three-skill architecture.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">11</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:55%"></div></div></div></td>
       <td class="score s4">4</td><td class="score s3">3</td><td class="score s3">3</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-ok">2026-06-28</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Solo Python. EPUB production pipeline. Last-minute submission (first commit June 28 18:48).</td>
     </tr>
-    <tr class="flagged-date" data-num="68" data-name="rax" data-tldr="language-controlled robotics platform connecting gemini agents to physical robot" data-notes="date flagged: first commit 2026-02-07 — project started 4 months before hackathon. disqualify for integrity." data-sales="false" data-flagged="true" data-verified="false">
+    <tr class="flagged-date" data-num="68" data-name="rax" data-tldr="language-controlled robotics platform connecting gemini agents to physical robot" data-notes="date flagged: first commit 2026-02-07 — project started 4 months before hackathon. disqualify for integrity." data-judge="" data-total="16" data-sales="false" data-flagged="true" data-verified="false">
       <td class="num-cell">68</td>
-      <td class="project-cell"><a href="https://github.com/arminforoughi/RAX" target="_blank">RAX</a><div class="repo-path">arminforoughi/RAX</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/arminforoughi/RAX" target="_blank">RAX</a><div class="repo-path">arminforoughi/RAX</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Language-controlled robotics platform connecting Gemini agents to physical robots (Booster K1 humanoid, SO-101 arm) via LiveKit WebRTC and YOLOv8 stereo depth.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-high">16</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-high" style="width:80%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s5">5</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-flag">2026-02-07</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">DATE FLAGGED: First commit 2026-02-07 — project started 4 months before hackathon. Disqualify for integrity.</td>
     </tr>
-    <tr class="" data-num="69" data-name="voice-bridge" data-tldr="real-time multimodal lip-reading assistive communication tool for people with al" data-notes="empty repo. the cause (als communication) is impactful if executed." data-sales="false" data-flagged="false" data-verified="false">
+    <tr class="" data-num="69" data-name="voice-bridge" data-tldr="real-time multimodal lip-reading assistive communication tool for people with al" data-notes="empty repo. the cause (als communication) is impactful if executed." data-judge="" data-total="15" data-sales="false" data-flagged="false" data-verified="false">
       <td class="num-cell">69</td>
-      <td class="project-cell"><a href="https://github.com/sachin-crispai/voice-bridge" target="_blank">VOICE-BRIDGE</a><div class="repo-path">sachin-crispai/voice-bridge</div></td>
+      <td class="project-cell"><a class="project-name" href="https://github.com/sachin-crispai/voice-bridge" target="_blank">VOICE-BRIDGE</a><div class="repo-path">sachin-crispai/voice-bridge</div></td>
       <td class="members-cell">1</td>
       <td class="tldr-cell">Real-time multimodal lip-reading assistive communication tool for people with ALS, translating lip movements to speech as vocal ability progressively degrades.</td>
       <td class="tech-cell"></td>
-      <td><span class="badge-none badge">None</span></td>
-      <td><span class="leg leg-superficial" title="No DO signals found.">Superficial</span></td>
+      <td><span class="badge-none">&mdash;</span></td>
+      <td><span class="leg leg-superficial" title="No DO signals found."><span class="dot dot-gray"></span>Superficial</span></td>
+      <td class="total-cell"><div class="total-wrap"><span class="total-num t-mid">15</span><span class="total-max">/20</span><div class="total-bar"><div class="total-fill t-mid" style="width:75%"></div></div></div></td>
       <td class="score s5">5</td><td class="score s4">4</td><td class="score s5">5</td><td class="score s1">1</td>
-      <td><span class="sales-no">—</span></td>
-      <td><span class="date-unknown">—</span></td>
+      <td class="sales-col"><span class="muted">&mdash;</span></td>
+      <td class="judge-col"><span class="muted">&mdash;</span></td>
       <td class="notes-cell">Empty repo. The cause (ALS communication) is impactful if executed.</td>
     </tr>
   </tbody>
@@ -1049,10 +1178,12 @@ function applyFilters() {
     const name  = r.dataset.name  || '';
     const tldr  = r.dataset.tldr  || '';
     const notes = r.dataset.notes || '';
-    const matchSearch = !q || name.includes(q) || tldr.includes(q) || notes.includes(q);
+    const judge = r.dataset.judge || '';
+    const matchSearch = !q || name.includes(q) || tldr.includes(q) || notes.includes(q) || judge.includes(q);
     const matchFilter =
       currentFilter === 'all'      ? true :
       currentFilter === 'verified' ? r.dataset.verified === 'true' :
+      currentFilter === 'judged'   ? r.dataset.judge    !== '' :
       currentFilter === 'flagged'  ? r.dataset.flagged  === 'true' :
       currentFilter === 'sales'    ? r.dataset.sales    === 'true' : true;
     const show = matchSearch && matchFilter;
@@ -1086,6 +1217,9 @@ function sortTable(col) {
   });
   rows.forEach(r => tbody.appendChild(r));
 }
+
+// Default: sort by Total score descending on load
+sortTable(7); sortTable(7);
 </script>
 </body>
 </html>
