@@ -1,0 +1,14 @@
+https://github.com/ajot/digitalocean-ai
+https://github.com/ajot/rootein
+https://github.com/ajot/typing-master
+https://github.com/ajot/do-test-app
+https://github.com/ajot/arcade
+https://github.com/ajot/claude-code-telegram-digitalocean
+https://github.com/ajot/seanotes
+https://github.com/ajot/bucketdrop
+https://github.com/ajot/mint-cli
+https://github.com/ajot/story-builder
+https://github.com/ajot/sammy-watch
+https://github.com/ajot/safari-tab-count
+https://github.com/ajot/amazon-unboxed
+https://github.com/ajot/notes-app-deploy

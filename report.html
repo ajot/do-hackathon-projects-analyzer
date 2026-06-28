@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIE Hackathon - Project Analysis</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    background: #f1f5f9; color: #0f172a; font-size: 14px;
+    border-top: 3px solid #0069ff;
+  }
+
+  /* Header */
+  header {
+    background: white; padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .do-mark {
+    width: 34px; height: 34px; background: #0069ff; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 12px; flex-shrink: 0;
+  }
+  header h1 { font-size: 15px; font-weight: 600; color: #0f172a; }
+  header p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+  .stats { display: flex; gap: 6px; }
+  .chip {
+    padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 500;
+    border: 1px solid #e2e8f0; background: #f8fafc; color: #64748b;
+  }
+  .chip-blue  { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+  .chip-green { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+  .chip-amber { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+  .chip-red   { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+
+  /* Toolbar */
+  .toolbar {
+    padding: 10px 28px; background: white; border-bottom: 1px solid #e2e8f0;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .toolbar input {
+    padding: 6px 11px; border: 1px solid #e2e8f0; border-radius: 6px;
+    font-size: 13px; width: 250px; outline: none; background: #f8fafc; color: #0f172a;
+  }
+  .toolbar input:focus { border-color: #0069ff; background: white; box-shadow: 0 0 0 3px rgba(0,105,255,0.1); }
+  .filters { display: flex; gap: 6px; }
+  .filter-btn {
+    padding: 5px 13px; border-radius: 20px; border: 1px solid #e2e8f0;
+    background: white; cursor: pointer; font-size: 12px; color: #64748b;
+    transition: all 0.12s; font-weight: 500;
+  }
+  .filter-btn:hover { border-color: #0069ff; color: #0069ff; }
+  .filter-btn.active { background: #0069ff; color: white; border-color: #0069ff; }
+  .count { margin-left: auto; color: #94a3b8; font-size: 12px; }
+
+  /* Table */
+  .table-wrap { padding: 20px 28px 48px; overflow-x: auto; }
+  table {
+    width: 100%; border-collapse: collapse; background: white;
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    min-width: 1200px;
+  }
+  thead tr { background: #0f172a; }
+  th {
+    padding: 10px 14px; text-align: left; font-weight: 500; font-size: 10px;
+    white-space: nowrap; cursor: pointer; user-select: none;
+    position: sticky; top: 0; background: #0f172a;
+    color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; z-index: 10;
+  }
+  th:hover { background: #1e293b; color: #cbd5e1; }
+  th.no-sort { cursor: default; }
+  th.no-sort:hover { background: #0f172a; color: #64748b; }
+  .sort-icon { margin-left: 3px; opacity: 0.5; font-style: normal; }
+  td {
+    padding: 10px 14px; border-bottom: 1px solid #f1f5f9;
+    vertical-align: top; color: #334155;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  tr.flagged-date td { background: #fff5f5; }
+  tr.flagged-date td:first-child { border-left: 3px solid #fca5a5; padding-left: 11px; }
+  tr.flagged-date:hover td { background: #fef2f2; }
+  tr.hidden { display: none !important; }
+
+  /* Hide last commit column */
+  th:nth-child(11), td:nth-child(11) { display: none; }
+
+  a { color: #0069ff; text-decoration: none; font-weight: 500; }
+  a:hover { text-decoration: underline; }
+
+  /* Badges */
+  .badge {
+    display: inline-block; padding: 2px 7px; border-radius: 4px;
+    color: white; font-size: 10px; font-weight: 600;
+    margin: 1px 2px 1px 0; cursor: help; letter-spacing: 0.01em;
+  }
+  .badge-none { background: #f1f5f9; color: #94a3b8; cursor: default; border: 1px solid #e2e8f0; }
+
+  /* Legitimacy */
+  .leg { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .leg-strong      { background: #dcfce7; color: #15803d; }
+  .leg-partial     { background: #fef3c7; color: #b45309; }
+  .leg-superficial { background: #fee2e2; color: #b91c1c; }
+
+  /* Scores - colored numbers */
+  .score    { text-align: center; font-weight: 700; font-size: 13px; }
+  .score-na { text-align: center; color: #e2e8f0; font-size: 13px; }
+  .s5 { color: #15803d; }
+  .s4 { color: #16a34a; }
+  .s3 { color: #d97706; }
+  .s2 { color: #ea580c; }
+  .s1 { color: #dc2626; }
+
+  /* Sales */
+  .sales-yes {
+    display: inline-block; background: #dcfce7; color: #15803d;
+    padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: help;
+  }
+  .sales-no { color: #cbd5e1; font-size: 12px; }
+
+  /* Dates */
+  .date-flag    { color: #ef4444; font-weight: 600; font-size: 11px; }
+  .date-ok      { color: #10b981; font-size: 11px; }
+  .date-unknown { color: #cbd5e1; font-size: 11px; }
+  .date-normal  { font-size: 11px; color: #94a3b8; }
+
+  /* Cells */
+  .project-cell { min-width: 140px; }
+  .project-cell .repo-path { color: #94a3b8; font-size: 10px; margin-top: 2px; }
+  .tldr-cell   { max-width: 240px; font-size: 12px; line-height: 1.5; color: #475569; }
+  .notes-cell  { max-width: 190px; font-size: 11px; color: #94a3b8; line-height: 1.5; }
+
+  .no-results { text-align: center; padding: 56px; color: #94a3b8; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="do-mark">DO</div>
+    <div>
+      <h1>AIE Hackathon &middot; Project Analysis</h1>
+      <p>June 27&ndash;28, 2026 &nbsp;&middot;&nbsp; Generated 2026-06-28 &nbsp;&middot;&nbsp; Internal use only</p>
+    </div>
+  </div>
+  <div class="stats">
+    <span class="chip">14 projects</span>
+    <span class="chip chip-blue">5 DO verified</span>
+    <span class="chip chip-amber">3 sales flags</span>
+    <span class="chip chip-red">8 date flagged</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Search projects, TLDRs, notes..." oninput="applyFilters()">
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
+    <button class="filter-btn" onclick="setFilter(this,'verified')">DO Verified</button>
+    <button class="filter-btn" onclick="setFilter(this,'flagged')">Date Flagged</button>
+    <button class="filter-btn" onclick="setFilter(this,'sales')">Sales Flag</button>
+  </div>
+  <span class="count" id="count">14 projects</span>
+</div>
+
+<div class="table-wrap">
+<table id="report-table">
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">Project <i class="sort-icon" id="si-0">&#8597;</i></th>
+      <th class="no-sort">TLDR</th>
+      <th class="no-sort">DO Services</th>
+      <th onclick="sortTable(3)">Legitimacy <i class="sort-icon" id="si-3">&#8597;</i></th>
+      <th onclick="sortTable(4)">Use Case <i class="sort-icon" id="si-4">&#8597;</i></th>
+      <th onclick="sortTable(5)">Unique <i class="sort-icon" id="si-5">&#8597;</i></th>
+      <th onclick="sortTable(6)">Difficulty <i class="sort-icon" id="si-6">&#8597;</i></th>
+      <th onclick="sortTable(7)">DO Depth <i class="sort-icon" id="si-7">&#8597;</i></th>
+      <th onclick="sortTable(8)">Sales <i class="sort-icon" id="si-8">&#8597;</i></th>
+      <th onclick="sortTable(9)">First Commit <i class="sort-icon" id="si-9">&#8597;</i></th>
+      <th class="no-sort">Last Commit</th>
+      <th class="no-sort">Notes</th>
+    </tr>
+  </thead>
+  <tbody id="tbody">
+
+    <!-- 1. digitalocean-ai -->
+    <tr class="flagged-date"
+        data-name="digitalocean-ai"
+        data-tldr="agent skill that teaches coding agents how to build and deploy apps with DigitalOcean Inference"
+        data-notes="reference skill file for DO Inference, not an app"
+        data-sales="false" data-flagged="true" data-verified="true">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/digitalocean-ai" target="_blank">digitalocean-ai</a>
+        <div class="repo-path">ajot/digitalocean-ai</div>
+      </td>
+      <td class="tldr-cell">An agent skill (slash command) that teaches coding agents how to build and deploy apps with DigitalOcean Inference - covers serverless inference, AI routing, image/audio/video, batch, and more.</td>
+      <td>
+        <span class="badge" style="background:#0069ff" title="Extensively documented - Serverless inference, 70+ models via OpenAI-compatible endpoint">Inference</span>
+        <span class="badge" style="background:#6e3fff" title="Inference Router (preview) mentioned in skill file">AI Routing</span>
+        <span class="badge" style="background:#0096c7" title="App Platform deployment covered in references">App Platform</span>
+        <span class="badge" style="background:#00b4d8" title="Spaces for storing generated assets covered">Spaces</span>
+        <span class="badge" style="background:#0077b6" title="Managed Postgres + pgvector covered">Managed Databases</span>
+      </td>
+      <td><span class="leg leg-partial">Partial</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-flag" title="First commit March 20, 2026 - before hackathon">Mar 20, 2026</span></td>
+      <td><span class="date-normal">Jun 27, 2026</span></td>
+      <td class="notes-cell">Documentation/skill reference, not a working app. Last commit was day of hackathon but first commit predates it by months.</td>
+    </tr>
+
+    <!-- 2. rootein -->
+    <tr data-name="rootein"
+        data-tldr="ruby on rails habit tracker with streaks deployed to DigitalOcean App Platform"
+        data-notes="rails 8 app, app platform deployment, well-structured"
+        data-sales="false" data-flagged="false" data-verified="true">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/rootein" target="_blank">rootein</a>
+        <div class="repo-path">ajot/rootein</div>
+      </td>
+      <td class="tldr-cell">A Ruby on Rails 8 habit tracker that lets users build daily streaks, originally built in 2009 and rebuilt in 2026 with AI assistance. Deployed on DigitalOcean App Platform.</td>
+      <td>
+        <span class="badge" style="background:#0096c7" title="README explicitly states Deployment: DigitalOcean App Platform. Dockerfile exposes port 8080.">App Platform</span>
+      </td>
+      <td><span class="leg leg-partial">Partial</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td class="notes-cell">Well-built Rails 8 app with Hotwire/Turbo. DO usage is deployment-only. No AI integration. Commit history unavailable.</td>
+    </tr>
+
+    <!-- 3. typing-master -->
+    <tr data-name="typing-master"
+        data-tldr="no files available to analyze"
+        data-notes="private or empty repository"
+        data-sales="false" data-flagged="false" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/typing-master" target="_blank">typing-master</a>
+        <div class="repo-path">ajot/typing-master</div>
+      </td>
+      <td class="tldr-cell" style="color:#94a3b8;font-style:italic;">No files available - repository may be private or empty.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td class="notes-cell">Could not fetch files. May be private or empty.</td>
+    </tr>
+
+    <!-- 4. do-test-app -->
+    <tr data-name="do-test-app"
+        data-tldr="no files available to analyze"
+        data-notes="private or empty repository"
+        data-sales="false" data-flagged="false" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/do-test-app" target="_blank">do-test-app</a>
+        <div class="repo-path">ajot/do-test-app</div>
+      </td>
+      <td class="tldr-cell" style="color:#94a3b8;font-style:italic;">No files available - repository may be private or empty.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td class="notes-cell">Name suggests a DO test/demo app. No files accessible.</td>
+    </tr>
+
+    <!-- 5. arcade -->
+    <tr data-name="arcade"
+        data-tldr="no files available to analyze"
+        data-notes="private or empty repository"
+        data-sales="false" data-flagged="false" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/arcade" target="_blank">arcade</a>
+        <div class="repo-path">ajot/arcade</div>
+      </td>
+      <td class="tldr-cell" style="color:#94a3b8;font-style:italic;">No files available - repository may be private or empty.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td class="notes-cell">No files accessible. Unknown project type.</td>
+    </tr>
+
+    <!-- 6. claude-code-telegram-digitalocean -->
+    <tr data-name="claude-code-telegram-digitalocean"
+        data-tldr="no files available - name suggests claude code telegram digitalocean integration"
+        data-notes="private or empty repository, interesting name"
+        data-sales="false" data-flagged="false" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/claude-code-telegram-digitalocean" target="_blank">claude-code-telegram-DO</a>
+        <div class="repo-path">ajot/claude-code-telegram-digitalocean</div>
+      </td>
+      <td class="tldr-cell" style="color:#94a3b8;font-style:italic;">No files available. Name suggests a Claude Code + Telegram bot + DigitalOcean integration.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td class="notes-cell">Interesting name - likely Claude Code via Telegram, hosted on DO. Follow up for repo access.</td>
+    </tr>
+
+    <!-- 7. seanotes -->
+    <tr class="flagged-date"
+        data-name="seanotes"
+        data-tldr="no files available to analyze"
+        data-notes="first commit was 2025, not 2026"
+        data-sales="false" data-flagged="true" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/seanotes" target="_blank">seanotes</a>
+        <div class="repo-path">ajot/seanotes</div>
+      </td>
+      <td class="tldr-cell" style="color:#94a3b8;font-style:italic;">No files available. Repository appears to be private or empty.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-flag" title="First commit June 27, 2025 - wrong year">Jun 27, 2025</span></td>
+      <td><span class="date-normal">Feb 9, 2026</span></td>
+      <td class="notes-cell">First commit is 2025 - same month/day as hackathon but wrong year. Pre-existing project.</td>
+    </tr>
+
+    <!-- 8. bucketdrop -->
+    <tr class="flagged-date"
+        data-name="bucketdrop"
+        data-tldr="macos menubar app for drag and drop file uploads to s3-compatible storage including digitalocean spaces"
+        data-notes="clean native app, supports DO Spaces as one of several backends"
+        data-sales="true" data-flagged="true" data-verified="true">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/bucketdrop" target="_blank">BucketDrop</a>
+        <div class="repo-path">ajot/bucketdrop</div>
+      </td>
+      <td class="tldr-cell">A macOS menubar app for drag-and-drop file uploads to S3-compatible storage (AWS S3, Cloudflare R2, DigitalOcean Spaces, MinIO), with instant shareable URL copy to clipboard.</td>
+      <td>
+        <span class="badge" style="background:#00b4d8" title="README explicitly lists DigitalOcean Spaces as a supported backend alongside R2, S3, MinIO">Spaces</span>
+      </td>
+      <td><span class="leg leg-partial">Partial</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td><span class="sales-yes" title="Native macOS app supporting DO Spaces - potential Spaces customer. Good Spaces use case story.">Yes</span></td>
+      <td><span class="date-flag" title="First commit January 19, 2026 - before hackathon">Jan 19, 2026</span></td>
+      <td><span class="date-normal">Jan 19, 2026</span></td>
+      <td class="notes-cell">Clean native app. DO Spaces is one of several supported backends. Pre-existing project.</td>
+    </tr>
+
+    <!-- 9. mint-cli -->
+    <tr class="flagged-date"
+        data-name="mint-cli"
+        data-tldr="python cli that scaffolds new projects using digitalocean inference to suggest project names"
+        data-notes="genuinely calls do inference api in code"
+        data-sales="false" data-flagged="true" data-verified="true">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/mint-cli" target="_blank">mint-cli</a>
+        <div class="repo-path">ajot/mint-cli</div>
+      </td>
+      <td class="tldr-cell">A Python CLI that scaffolds new projects - asks what you're building, uses DO Inference (Llama 3 8B) to suggest names, creates a git repo, and opens a WHY.md template.</td>
+      <td>
+        <span class="badge" style="background:#0069ff" title="Uses OpenAI SDK pointing to https://inference.do-ai.run/v1/ with DIGITAL_OCEAN_MODEL_ACCESS_KEY, calls llama3-8b-instruct">Inference</span>
+      </td>
+      <td><span class="leg leg-strong">Strong</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-flag" title="First commit January 13, 2026 - before hackathon">Jan 13, 2026</span></td>
+      <td><span class="date-normal">Jan 20, 2026</span></td>
+      <td class="notes-cell">Genuinely calls DO inference API (inference.do-ai.run/v1/) with llama3-8b-instruct. Simple but legit. Pre-dates hackathon.</td>
+    </tr>
+
+    <!-- 10. story-builder -->
+    <tr class="flagged-date"
+        data-name="story-builder"
+        data-tldr="flask app generating ai bedtime stories with tts and background music using digitalocean inference app platform and spaces"
+        data-notes="deep do integration, multi-modal, strong use case"
+        data-sales="true" data-flagged="true" data-verified="true">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/story-builder" target="_blank">story-builder</a>
+        <div class="repo-path">ajot/story-builder</div>
+      </td>
+      <td class="tldr-cell">Flask app generating AI bedtime stories for kids (English + Hindi) using DO Inference (Llama 3.3 70B), ElevenLabs TTS and Stable Audio via DO async-invoke, deployed on App Platform.</td>
+      <td>
+        <span class="badge" style="background:#0069ff" title="Uses OpenAI SDK with base_url=https://inference.do-ai.run/v1/ and DIGITAL_OCEAN_MODEL_ACCESS_KEY, calls llama3.3-70b-instruct">Inference</span>
+        <span class="badge" style="background:#6e3fff" title="Uses DO async-invoke endpoint for TTS and music generation with fal.ai models">AI Routing</span>
+        <span class="badge" style="background:#0096c7" title="Deployed to DO App Platform per README and Dockerfile">App Platform</span>
+        <span class="badge" style="background:#00b4d8" title="CDN assets served from .digitaloceanspaces.com">Spaces</span>
+      </td>
+      <td><span class="leg leg-strong">Strong</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s5">5</span></td>
+      <td><span class="sales-yes" title="Deep multi-service DO integration. Live at story.curiousmints.com. Strong case study candidate.">Yes</span></td>
+      <td><span class="date-flag" title="First commit December 27, 2025 - before hackathon">Dec 27, 2025</span></td>
+      <td><span class="date-normal">Jan 16, 2026</span></td>
+      <td class="notes-cell">Best DO integration in this set. Inference + async-invoke + App Platform + Spaces CDN. Live production app. Pre-dates hackathon.</td>
+    </tr>
+
+    <!-- 11. sammy-watch -->
+    <tr class="flagged-date"
+        data-name="sammy-watch"
+        data-tldr="terminal tui dashboard for monitoring digitalocean apps databases agents and knowledge bases across multiple accounts"
+        data-notes="deep do api integration, monitors genai agents and knowledge bases, multi-account"
+        data-sales="true" data-flagged="true" data-verified="true">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/sammy-watch" target="_blank">sammy-watch</a>
+        <div class="repo-path">ajot/sammy-watch</div>
+      </td>
+      <td class="tldr-cell">A Textual TUI dashboard for monitoring DigitalOcean App Platform apps, managed databases, GenAI agents, and knowledge bases across multiple DO accounts simultaneously.</td>
+      <td>
+        <span class="badge" style="background:#0096c7" title="Calls /v2/apps via DO API, monitors deployment phases and logs">App Platform</span>
+        <span class="badge" style="background:#0077b6" title="Calls /v2/databases via DO API">Managed Databases</span>
+        <span class="badge" style="background:#0069ff" title="Calls /v2/gen-ai/agents and /v2/gen-ai/knowledge_bases">Inference</span>
+      </td>
+      <td><span class="leg leg-strong">Strong</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s5">5</span></td>
+      <td><span class="sales-yes" title="Multi-account DO user (personal + work + client) = significant customer. Monitors GenAI agents + KB = early GenAI adopter. Product gap: multi-account monitoring in DO console.">Yes</span></td>
+      <td><span class="date-flag" title="First commit January 14, 2026 - before hackathon">Jan 14, 2026</span></td>
+      <td><span class="date-normal">Jan 14, 2026</span></td>
+      <td class="notes-cell">Deep DO API. Multi-account = real paying customer. Monitors /gen-ai/agents + knowledge_bases. Signals product gap in DO console. Sales + product should reach out.</td>
+    </tr>
+
+    <!-- 12. safari-tab-count -->
+    <tr class="flagged-date"
+        data-name="safari-tab-count"
+        data-tldr="safari extension that shows total tab count across all windows in the toolbar badge"
+        data-notes="no do services, fun side project"
+        data-sales="false" data-flagged="true" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/safari-tab-count" target="_blank">safari-tab-count</a>
+        <div class="repo-path">ajot/safari-tab-count</div>
+      </td>
+      <td class="tldr-cell">A simple Safari extension that shows total open tab count across all windows in the toolbar badge, updating in real-time.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td class="score"><span class="s2">2</span></td>
+      <td class="score"><span class="s1">1</span></td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-flag" title="First commit January 20, 2026 - before hackathon">Jan 20, 2026</span></td>
+      <td><span class="date-normal">Jan 20, 2026</span></td>
+      <td class="notes-cell">No DO services. Fun utility. Swift + JS browser extension. Not relevant to hackathon criteria.</td>
+    </tr>
+
+    <!-- 13. amazon-unboxed -->
+    <tr data-name="amazon-unboxed"
+        data-tldr="react typescript app that turns amazon order history csv into spotify wrapped style visual recap running entirely in browser"
+        data-notes="no do services, privacy-first client-side app, creative concept"
+        data-sales="false" data-flagged="false" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/amazon-unboxed" target="_blank">amazon-unboxed</a>
+        <div class="repo-path">ajot/amazon-unboxed</div>
+      </td>
+      <td class="tldr-cell">React/TypeScript app that turns Amazon order history CSV exports into a Spotify Wrapped-style animated recap - all running in the browser, no server, fully private.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s4">4</span></td>
+      <td class="score"><span class="s3">3</span></td>
+      <td class="score"><span class="s1">1</span></td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td class="notes-cell">Creative, well-executed. Strong use case + uniqueness but zero DO integration. Good App Platform pitch opportunity.</td>
+    </tr>
+
+    <!-- 14. notes-app-deploy -->
+    <tr data-name="notes-app-deploy"
+        data-tldr="no files available to analyze"
+        data-notes="private or empty repository"
+        data-sales="false" data-flagged="false" data-verified="false">
+      <td class="project-cell">
+        <a href="https://github.com/ajot/notes-app-deploy" target="_blank">notes-app-deploy</a>
+        <div class="repo-path">ajot/notes-app-deploy</div>
+      </td>
+      <td class="tldr-cell" style="color:#94a3b8;font-style:italic;">No files available - repository may be private or empty.</td>
+      <td><span class="badge badge-none">None</span></td>
+      <td><span class="leg leg-superficial">Superficial</span></td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td class="score-na">-</td>
+      <td><span class="sales-no">-</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td><span class="date-unknown">Unknown</span></td>
+      <td class="notes-cell">Name suggests a notes app deployment demo. No files accessible.</td>
+    </tr>
+
+  </tbody>
+</table>
+<div class="no-results hidden" id="no-results">No projects match the current filter.</div>
+</div>
+
+<script>
+let activeFilter = 'all';
+let sortCol = -1;
+let sortAsc = true;
+
+function setFilter(btn, filter) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const rows = document.querySelectorAll('#tbody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const name  = (row.dataset.name  || '').toLowerCase();
+    const tldr  = (row.dataset.tldr  || '').toLowerCase();
+    const notes = (row.dataset.notes || '').toLowerCase();
+    const matchSearch = !q || name.includes(q) || tldr.includes(q) || notes.includes(q);
+    const matchFilter =
+      activeFilter === 'all' ||
+      (activeFilter === 'verified' && row.dataset.verified === 'true') ||
+      (activeFilter === 'flagged'  && row.dataset.flagged  === 'true') ||
+      (activeFilter === 'sales'    && row.dataset.sales    === 'true');
+    const show = matchSearch && matchFilter;
+    row.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('count').textContent = `${visible} project${visible !== 1 ? 's' : ''}`;
+  document.getElementById('no-results').classList.toggle('hidden', visible > 0);
+  document.getElementById('report-table').classList.toggle('hidden', visible === 0);
+}
+
+function sortTable(col) {
+  const tbody = document.getElementById('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  document.querySelectorAll('[id^="si-"]').forEach(el => { el.innerHTML = '&#8597;'; });
+  if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+  const icon = document.getElementById('si-' + col);
+  if (icon) icon.innerHTML = sortAsc ? '&#8593;' : '&#8595;';
+  rows.sort((a, b) => {
+    const aVal = a.cells[col]?.textContent.trim() || '';
+    const bVal = b.cells[col]?.textContent.trim() || '';
+    const aNum = parseFloat(aVal), bNum = parseFloat(bVal);
+    if (!isNaN(aNum) && !isNaN(bNum)) return sortAsc ? aNum - bNum : bNum - aNum;
+    return sortAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+  applyFilters();
+}
+
+applyFilters();
+</script>
+</body>
+</html>
