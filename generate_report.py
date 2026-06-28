@@ -292,6 +292,15 @@ sales_ct  = sum(1 for r in repos if OVERRIDES.get(r.get("num"),{}).get("sales", 
 flagged_ct= sum(1 for r in repos if flag_date(r.get("first_commit")))
 gen_ts    = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
+# Judge dropdown options (count per judge, sorted by name)
+judge_counts = {}
+for n, j in JUDGES.items():
+    judge_counts[j] = judge_counts.get(j, 0) + 1
+judge_options = "\n".join(
+    f'    <option value="{j.lower()}">{j} ({c})</option>'
+    for j, c in sorted(judge_counts.items())
+)
+
 CSS = """:root {
   --ink: #1a1a1a; --ink-2: #3c4257; --muted: #697386; --faint: #8792a2;
   --line: #e6e8eb; --line-soft: #f0f1f3; --bg: #f6f8fa; --surface: #ffffff;
@@ -342,6 +351,9 @@ header p { font-size: 12px; color: var(--faint); margin-top: 3px; }
 .filter-btn { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 12.5px; color: var(--ink-2); transition: all .12s; font-weight: 500; font-family: inherit; }
 .filter-btn:hover { border-color: #cfd4dc; background: var(--bg); }
 .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.judge-select { padding: 7px 30px 7px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 12.5px; color: var(--ink-2); background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23697386' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center; cursor: pointer; font-family: inherit; font-weight: 500; -webkit-appearance: none; appearance: none; outline: none; transition: border-color .12s, box-shadow .12s; }
+.judge-select:hover { border-color: #cfd4dc; }
+.judge-select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(31,111,235,.12); }
 .count { margin-left: auto; color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
 
 /* Table */
@@ -431,6 +443,7 @@ a:hover { color: var(--blue-dark); text-decoration: underline; }
 
 JS = """
 let currentFilter = 'all';
+let currentJudge = '';
 let sortCol = -1, sortAsc = true;
 
 function applyFilters() {
@@ -449,7 +462,8 @@ function applyFilters() {
       currentFilter === 'judged'   ? r.dataset.judge    !== '' :
       currentFilter === 'flagged'  ? r.dataset.flagged  === 'true' :
       currentFilter === 'sales'    ? r.dataset.sales    === 'true' : true;
-    const show = matchSearch && matchFilter;
+    const matchJudge = !currentJudge || judge === currentJudge;
+    const show = matchSearch && matchFilter && matchJudge;
     r.classList.toggle('hidden', !show);
     if (show) visible++;
   });
@@ -460,6 +474,11 @@ function setFilter(btn, f) {
   currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  applyFilters();
+}
+
+function setJudge(j) {
+  currentJudge = j;
   applyFilters();
 }
 
@@ -524,6 +543,10 @@ HTML = f"""<!DOCTYPE html>
     <button class="filter-btn" onclick="setFilter(this,'flagged')">Date Flagged</button>
     <button class="filter-btn" onclick="setFilter(this,'sales')">Sales Flag</button>
   </div>
+  <select id="judge-select" class="judge-select" onchange="setJudge(this.value)">
+    <option value="">All judges</option>
+{judge_options}
+  </select>
   <span class="count" id="count">{total} projects</span>
 </div>
 <div class="table-wrap">
