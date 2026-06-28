@@ -1,0 +1,9 @@
+name: do-hackathon-projects-analyzer
+static_sites:
+- name: do-hackathon-projects-analyzer
+  github:
+    repo: ajot/do-hackathon-projects-analyzer
+    branch: main
+    deploy_on_push: true
+  index_document: index.html
+  source_dir: /
