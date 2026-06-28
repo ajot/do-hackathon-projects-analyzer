@@ -1,0 +1,7 @@
+fetcher.py
+requirements.txt
+*.json
+.env
+.venv/
+__pycache__/
+.claude/
